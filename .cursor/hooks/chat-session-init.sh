@@ -77,20 +77,26 @@ echo "Timestamp reference updated from file creation date: $REF_CREATION_TIMESTA
 rm -f "$TEMP_FILE"
 
 # Lambda Engine Mode Selection
+# Automatic mode selection with no user prompts required
+# Priority: 1) Explicit in prompt, 2) Stored mode, 3) Prompt analysis, 4) Default to Mode 1
 MODE_FILE=".cursor/.lambda-mode"
 MODE_SELECTED=""
 MODE_SUGGESTED=""
+MODE_SOURCE=""
 
-# Function to analyze prompt and suggest mode
+# Function to analyze prompt and suggest mode automatically
+# Uses pattern matching to detect Mode 1 (stable) vs Mode 2 (paradigm shift) indicators
 suggest_mode() {
     local prompt="$1"
     local mode1_score=0
     local mode2_score=0
 
     # Mode 1 indicators (stable, well-defined problems)
+    # High-weight indicators (score +2)
     if echo "$prompt" | grep -qiE "(bug|fix|error|implement|add|create|update|modify|refactor|test|routine|feature|task|write|code|function|class|api|endpoint|database|query|sql)"; then
         mode1_score=$((mode1_score + 2))
     fi
+    # Medium-weight indicators (score +1)
     if echo "$prompt" | grep -qiE "(how to|how do|show me|example|tutorial|guide|step by step)"; then
         mode1_score=$((mode1_score + 1))
     fi
@@ -99,9 +105,11 @@ suggest_mode() {
     fi
 
     # Mode 2 indicators (contradictions, paradigm shifts)
+    # High-weight indicators (score +2)
     if echo "$prompt" | grep -qiE "(contradiction|paradox|conflict|problem|issue|challenge|rethink|redesign|architecture|design|paradigm|shift|fundamental|foundational)"; then
         mode2_score=$((mode2_score + 2))
     fi
+    # Medium-weight indicators (score +1)
     if echo "$prompt" | grep -qiE "(what if|why|should|explore|alternative|different|better|improve|optimize|evaluate|analyze|understand|pattern)"; then
         mode2_score=$((mode2_score + 1))
     fi
@@ -109,13 +117,13 @@ suggest_mode() {
         mode2_score=$((mode2_score + 1))
     fi
 
-    # Determine suggested mode
+    # Determine suggested mode based on scores
     if [ $mode2_score -gt $mode1_score ]; then
         echo "2"
     elif [ $mode1_score -gt $mode2_score ]; then
         echo "1"
     else
-        # Default to Mode 1 for neutral prompts
+        # Default to Mode 1 for neutral prompts (stable operation)
         echo "1"
     fi
 }
@@ -129,12 +137,16 @@ if echo "$prompt_text" | grep -qiE "(mode\s*[12]|lambda\s*mode\s*[12]|duality|ha
     fi
 fi
 
+# Automatic mode selection logic (no user prompts)
+# Priority: 1) Explicit in prompt, 2) Stored mode, 3) Prompt analysis, 4) Default to Mode 1
+
 # If mode not explicitly specified, analyze prompt to suggest one
 if [ -z "$MODE_SELECTED" ] && [ -n "$prompt_text" ]; then
     MODE_SUGGESTED=$(suggest_mode "$prompt_text")
 fi
 
 # If mode not in prompt, check for existing mode file (but not if it says "waiting")
+STORED_MODE=""
 if [ -z "$MODE_SELECTED" ] && [ -f "$MODE_FILE" ]; then
     STORED_MODE=$(cat "$MODE_FILE" | tr -d '[:space:]')
     if [ "$STORED_MODE" != "waiting" ] && ([ "$STORED_MODE" = "1" ] || [ "$STORED_MODE" = "2" ]); then
@@ -142,46 +154,35 @@ if [ -z "$MODE_SELECTED" ] && [ -f "$MODE_FILE" ]; then
     fi
 fi
 
-# If still no mode, prompt user to select
+# If still no mode, use suggested mode from prompt analysis
+if [ -z "$MODE_SELECTED" ] && [ -n "$MODE_SUGGESTED" ]; then
+    MODE_SELECTED="$MODE_SUGGESTED"
+fi
+
+# Final fallback: Default to Mode 1 (Duality Navigation) for stable operation
 if [ -z "$MODE_SELECTED" ]; then
-    # Output mode selection prompt
-    MODE_PROMPT="🤖 **Lambda Engine Mode Selection**
-
-Please select a mode for this session:
-
-**Mode 1 (Duality Navigation)** - For stable, well-defined problems
-- Use for: Routine tasks, well-defined features, bug fixes
-- Operators: Telo, Kata, Ortho, Pro, Latch
-- Trajectory: Maintain J=0 or S* state
-
-**Mode 2 (HALIRA Protocol)** - For contradictions and paradigm shifts
-- Use for: Foundational contradictions, paradoxes, paradigm shifts
-- Operators: Ana, Para, Flux, Meta, Non
-- Trajectory: Navigate through HALIRA steps
-
-Reply with: \`mode 1\` or \`mode 2\` to activate your choice."
-
-    # Store that we're waiting for mode selection
-    echo "waiting" > "$MODE_FILE"
-
-    # Log session with time information
-    echo "{\"session_id\": \"$SESSION_ID\", \"timestamp\": \"$TIMESTAMP\", \"date\": \"$CURRENT_DATE\", \"time_utc\": \"$CURRENT_TIME\", \"time_12h\": \"$TIME_12H\", \"time_24h\": \"$TIME_24H\", \"prompt\": \"$prompt_text\", \"lambda_mode\": \"pending\"}" > "$SESSION_LOG_DIR/session-$SESSION_ID.json"
-
-    # Output JSON response with mode selection prompt
-    echo "{
-  \"continue\": true,
-  \"user_message\": \"$MODE_PROMPT\"
-}"
-    exit 0
+    MODE_SELECTED="1"
 fi
 
 # Mode is selected - store it and provide next steps
 echo "$MODE_SELECTED" > "$MODE_FILE"
 
+# Determine how mode was selected for logging (must check before storing)
+if echo "$prompt_text" | grep -qiE "(mode\s*[12]|lambda\s*mode\s*[12]|duality|halira)"; then
+    MODE_SOURCE="explicit"
+elif [ -n "$STORED_MODE" ] && [ "$STORED_MODE" != "waiting" ] && ([ "$STORED_MODE" = "1" ] || [ "$STORED_MODE" = "2" ]); then
+    MODE_SOURCE="stored"
+elif [ -n "$MODE_SUGGESTED" ]; then
+    MODE_SOURCE="analyzed"
+else
+    MODE_SOURCE="default"
+fi
+
 # Generate mode-specific suggestions
 if [ "$MODE_SELECTED" = "1" ]; then
     MODE_NAME="Duality Navigation"
     MODE_DESC="Stable, well-defined problems"
+    MODE_ICON="🧭"
     NEXT_STEPS="**Next Steps for Mode 1:**
 - Use \`/goal\` to define clear objectives
 - Use \`/plan\` to structure your work
@@ -193,6 +194,7 @@ if [ "$MODE_SELECTED" = "1" ]; then
 else
     MODE_NAME="HALIRA Protocol"
     MODE_DESC="Contradictions and paradigm shifts"
+    MODE_ICON="🌀"
     NEXT_STEPS="**Next Steps for Mode 2:**
 - Use \`/halira\` to start the HALIRA Protocol
 - Use \`/detect-state\` to check phase space state
@@ -204,30 +206,41 @@ else
 fi
 
 # Log session with time information and mode
-echo "{\"session_id\": \"$SESSION_ID\", \"timestamp\": \"$TIMESTAMP\", \"date\": \"$CURRENT_DATE\", \"time_utc\": \"$CURRENT_TIME\", \"time_12h\": \"$TIME_12H\", \"time_24h\": \"$TIME_24H\", \"prompt\": \"$prompt_text\", \"lambda_mode\": \"$MODE_SELECTED\"}" > "$SESSION_LOG_DIR/session-$SESSION_ID.json"
+echo "{\"session_id\": \"$SESSION_ID\", \"timestamp\": \"$TIMESTAMP\", \"date\": \"$CURRENT_DATE\", \"time_utc\": \"$CURRENT_TIME\", \"time_12h\": \"$TIME_12H\", \"time_24h\": \"$TIME_24H\", \"prompt\": \"$prompt_text\", \"lambda_mode\": \"$MODE_SELECTED\", \"mode_source\": \"$MODE_SOURCE\"}" > "$SESSION_LOG_DIR/session-$SESSION_ID.json"
 
 # Output JSON response with mode confirmation and next steps
 # Preserve original prompt if it exists and isn't just a mode selection
 if [ -n "$prompt_text" ] && ! echo "$prompt_text" | grep -qiE "^(mode\s*[12]|lambda\s*mode\s*[12]|duality|halira)$"; then
     # Original prompt exists and isn't just mode selection - include it
-    # Escape the prompt text for JSON using jq
-    ESCAPED_PROMPT=$(echo "$prompt_text" | jq -Rs .)
     # Build message with prompt included
-    MESSAGE="✅ Lambda Engine Mode $MODE_SELECTED ($MODE_NAME) activated for this session.
+    MESSAGE="$MODE_ICON **Lambda Engine Mode $MODE_SELECTED ($MODE_NAME)** automatically activated
+*Mode selected via: $MODE_SOURCE*
 
 $NEXT_STEPS
-
-Session ID: $SESSION_ID | Timestamp: $REF_CREATION_TIMESTAMP
 
 ---
-Your prompt: $prompt_text"
+**Session Info:**
+- Session ID: \`$SESSION_ID\`
+- Timestamp: \`$REF_CREATION_TIMESTAMP\`
+- Time (UTC): \`$CURRENT_TIME\`
+- Time (12h): \`$TIME_12H\`
+
+---
+**Your prompt:**
+$prompt_text"
 else
     # No meaningful prompt or just mode selection - show confirmation only
-    MESSAGE="✅ Lambda Engine Mode $MODE_SELECTED ($MODE_NAME) activated for this session.
+    MESSAGE="$MODE_ICON **Lambda Engine Mode $MODE_SELECTED ($MODE_NAME)** automatically activated
+*Mode selected via: $MODE_SOURCE*
 
 $NEXT_STEPS
 
-Session ID: $SESSION_ID | Timestamp: $REF_CREATION_TIMESTAMP"
+---
+**Session Info:**
+- Session ID: \`$SESSION_ID\`
+- Timestamp: \`$REF_CREATION_TIMESTAMP\`
+- Time (UTC): \`$CURRENT_TIME\`
+- Time (12h): \`$TIME_12H\`"
 fi
 
 # Build JSON response using jq for proper escaping

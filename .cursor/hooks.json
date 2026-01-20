@@ -1,12 +1,65 @@
 {
   "version": 1,
   "hooks": {
+    "beforeShellExecution": [
+      { "command": "./hooks/security-audit.sh" },
+      { "command": "./hooks/permission-control.sh" }
+    ],
+    "afterShellExecution": [
+      { "command": "./hooks/security-audit.sh" }
+    ],
+    "beforeMCPExecution": [
+      { "command": "./hooks/mcp-governance.sh" },
+      { "command": "./hooks/mcp-permission-control.sh" },
+      { "command": "./hooks/security-audit.sh" }
+    ],
+    "afterMCPExecution": [
+      { "command": "./hooks/mcp-governance.sh" },
+      { "command": "./hooks/security-audit.sh" }
+    ],
+    "beforeReadFile": [
+      { "command": "./hooks/temporal-anchor-update.sh" },
+      { "command": "./hooks/security-audit.sh" },
+      { "command": "./hooks/file-edit-timestamp.sh" }
+    ],
+    "afterFileEdit": [
+      { "command": "./hooks/file-edit-timestamp.sh" },
+      { "command": "./hooks/automated-formatter.sh" },
+      { "command": "./hooks/security-audit.sh" },
+      { "command": "./hooks/secret-scanner.sh" },
+      { "command": "./hooks/documentation-validator.sh" },
+      { "command": "./hooks/documentation-implementation-update.sh" }
+    ],
     "beforeSubmitPrompt": [
-      {
-        "command": "./hooks/chat-session-init.sh",
-        "description": "Initialize new chat session with context and setup"
-      }
+      { "command": "./hooks/compliance-check.sh" },
+      { "command": "./hooks/secret-scanner.sh" }
+    ],
+    "beforeTabFileRead": [
+      { "command": "./hooks/temporal-anchor-update.sh" },
+      { "command": "./hooks/file-access-control.sh" }
+    ],
+    "afterTabFileEdit": [
+      { "command": "./hooks/file-edit-timestamp.sh" },
+      { "command": "./hooks/automated-formatter.sh" },
+      { "command": "./hooks/secret-scanner.sh" },
+      { "command": "./hooks/documentation-validator.sh" },
+      { "command": "./hooks/documentation-implementation-update.sh" }
+    ],
+    "stop": [
+      { "command": "./hooks/temporal-anchor-update.sh" },
+      { "command": "./hooks/agent-analytics.sh" }
+    ],
+    "afterAgentResponse": [
+      { "command": "./hooks/agent-analytics.sh" },
+      { "command": "./hooks/security-audit.sh" },
+      { "command": "./hooks/documentation-implementation-update.sh" },
+      { "command": "./hooks/agent-claim-verification.sh" }
+    ],
+    "afterAgentThought": [
+      { "command": "./hooks/agent-analytics.sh" },
+      { "command": "./hooks/security-audit.sh" },
+      { "command": "./hooks/documentation-implementation-update.sh" },
+      { "command": "./hooks/agent-claim-verification.sh" }
     ]
   }
 }
-
