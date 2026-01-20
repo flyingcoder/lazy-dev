@@ -402,4 +402,4 @@ Apply this rule when:
 
 - See: `lambda-operators-unified.mdc` for unified architecture
 - See: `mode-operator-selection.mdc` for mode-based operator selection
-- See: `.cursor/rules/general/operator-tools.mdc` for original rules (reference)
+- See: `operator-tools-integrated.mdc` for original rules (reference)

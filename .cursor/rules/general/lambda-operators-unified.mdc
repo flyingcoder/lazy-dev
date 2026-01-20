@@ -61,5 +61,3 @@ This rule always applies (`alwaysApply: true`) to establish the foundational cog
 
 - See: `mode-operator-selection.mdc` for detailed operator selection guidance
 - See: `halira-operator-mapping.mdc` for HALIRA Protocol operator sequences
-- See: `.cursor/rules/general/lambda-engine-core.mdc` for Lambda Engine details (reference)
-- See: `.cursor/rules/general/operators-core.mdc` for operator definitions (reference)

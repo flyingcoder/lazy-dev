@@ -145,7 +145,7 @@ See: `mode-operator-selection.mdc` for detailed Mode 2 operator guidance
 
 ### Reference
 
-See: `state-detection-enhanced.mdc` for detailed state detection guidance
+See: `state-detection.mdc` for detailed state detection guidance
 
 ---
 
@@ -272,6 +272,6 @@ See: `mode-transitions.mdc` for detailed transition guidance
 - See: `lambda-operators-unified.mdc` for unified architecture
 - See: `mode-operator-selection.mdc` for detailed operator selection
 - See: `mode-transitions.mdc` for transition guidance
-- See: `state-detection-enhanced.mdc` for state detection
+- See: `state-detection.mdc` for state detection
 - See: `halira-operator-mapping.mdc` for HALIRA sequences
-- See: `.cursor/rules/general/bimodal-operation.mdc` for mode definitions (reference)
+- See: `bimodal-operation-integrated.mdc` for mode definitions (reference)

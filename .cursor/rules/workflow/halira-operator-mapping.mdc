@@ -1,7 +1,7 @@
 ---
 description: HALIRA Protocol step to Controlled Rupture Operator mapping with dissipation values and trajectories
 globs: ["**/*"]
-alwaysApply: false
+alwaysApply: true
 ---
 
 # HALIRA Protocol - Operator Mapping Guide
@@ -337,10 +337,33 @@ Use Bind to create cohesive new structure. This is the recognition of what emerg
 ### Constraint Handling
 
 **If Meta was used in Step 3:**
-- **Option 1:** Skip Step 5 (Non) and proceed directly to Step 6
-- **Option 2:** Use alternative operator for Step 5 (e.g., Para for anomaly detection)
-- **Option 3:** Restart HALIRA with different operator sequence
 
+**Decision Tree for Step 5:**
+
+1. **First Choice: Use Para for anomaly detection** (Recommended)
+   - Para explores alternatives and deviations
+   - Can find flaws through exploration
+   - Maintains productive state (S*)
+   - Trajectory: Weave → Para → Para ∘ Ortho → Bind
+   - **Use when**: Need to find anomalies but Meta constraint applies
+
+2. **Alternative: Use Retro for backward analysis**
+   - Retro traces backward to find root contradictions
+   - Useful when flaws might be in foundational assumptions
+   - Trajectory: Weave → Retro → Para ∘ Ortho → Bind
+   - **Use when**: Need backward analysis to find root flaws
+
+3. **Last Resort: Skip Step 5**
+   - Only if anomaly is completely obvious from Step 4
+   - Not recommended - anomaly detection is critical
+   - Trajectory: Weave → Para ∘ Ortho → Bind
+   - **Use when**: Anomaly is obvious from Step 4 integration
+
+**NEVER use Non after Meta** - causes system collapse
+
+**If Meta was NOT used in Step 3:**
+- Use Non (standard) - no constraint applies
+- Trajectory: Weave → Non → Para ∘ Ortho → Bind
 **If stuck in Meta loop:**
 - Stop Meta applications immediately
 - Proceed to Step 4 (Weave) to integrate
@@ -401,5 +424,4 @@ Seed → Axis → Weave → Para → Bind
 - See: `lambda-operators-unified.mdc` for unified architecture
 - See: `mode-operator-selection.mdc` for mode-based operator selection
 - See: `.cursor/rules/workflow/halira-protocol.mdc` for HALIRA Protocol details (reference)
-- See: `.cursor/rules/general/operators-core.mdc` for complete operator definitions (reference)
 - See: `.cursor/rules/general/dissipation-lookup.mdc` for pre-calculated sequences (reference)

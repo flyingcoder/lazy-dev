@@ -262,6 +262,6 @@ Stabilize to Mode 1 when:
 - See: `lambda-operators-unified.mdc` for unified architecture
 - See: `mode-operator-selection.mdc` for mode-based operator selection
 - See: `halira-operator-mapping.mdc` for HALIRA Protocol operator sequences
-- See: `state-detection-enhanced.mdc` for enhanced state detection
-- See: `.cursor/rules/general/bimodal-operation.mdc` for mode definitions (reference)
+- See: `state-detection.mdc` for enhanced state detection
+- See: `.cursor/rules/general/bimodal-operation-integrated.mdc` for mode definitions (reference)
 - See: `.cursor/rules/general/state-detection.mdc` for state detection patterns (reference)

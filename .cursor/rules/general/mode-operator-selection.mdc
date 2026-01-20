@@ -102,6 +102,53 @@ This rule always applies (`alwaysApply: true`) to guide operator selection based
    - Current paradigm insufficient
    - Requires paradigm shift
 
+### Explicit Mode Selection Criteria
+
+**Use Mode 1 when:**
+- Stable, well-defined problem space
+- No foundational contradictions
+- Current paradigm sufficient
+- Routine operations
+- Contradictions are manageable (can be resolved within current paradigm)
+
+**Use Mode 2 when:**
+- **Foundational contradiction detected** (see criteria below)
+- Irreducible paradox encountered
+- Current paradigm insufficient
+- Requires paradigm shift
+- Mode 1 approaches fail repeatedly
+
+### Foundational vs Manageable Contradiction
+
+**A contradiction is "foundational" (requires Mode 2) when:**
+
+1. **Irreducible**: Cannot be resolved within current paradigm
+   - Attempts to resolve create new contradictions
+   - Resolution requires changing fundamental assumptions
+   - Current structure cannot absorb the contradiction
+
+2. **System-Wide**: Affects core architecture or design
+   - Not isolated to single component
+   - Affects multiple systems or layers
+   - Requires architectural change
+
+3. **Paradigm-Limiting**: Current paradigm cannot handle it
+   - Requires new way of thinking
+   - Current tools/approaches insufficient
+   - Needs higher-order logic
+
+4. **Persistent**: Repeated attempts fail
+   - Mode 1 approaches tried and failed
+   - Problem recurs despite fixes
+   - Indicates deeper issue
+
+**A contradiction is "manageable" (use Mode 1) when:**
+- Can be resolved within current paradigm
+- Isolated to specific component
+- Current tools/approaches sufficient
+- First attempt likely to succeed
+
+
 ### Operator Selection Process
 
 1. **Determine Mode**: Mode 1 (stable) or Mode 2 (paradigm shift)
@@ -153,5 +200,4 @@ This rule always applies (`alwaysApply: true`) to guide operator selection based
 - See: `lambda-operators-unified.mdc` for unified architecture
 - See: `halira-operator-mapping.mdc` for detailed HALIRA step mappings
 - See: `mode-transitions.mdc` for mode transition guidance
-- See: `.cursor/rules/general/operators-core.mdc` for complete operator definitions (reference)
 - See: `.cursor/rules/general/dissipation-lookup.mdc` for pre-calculated sequences (reference)
