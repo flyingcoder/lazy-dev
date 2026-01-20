@@ -1,0 +1,121 @@
+---
+description: Formula-driven Lambda Engine examples and use cases
+globs: ["**/*"]
+alwaysApply: false
+---
+
+# Lambda Engine Core - Examples
+
+Formula-driven examples demonstrating Lambda Engine operator selection and mode coordination.
+
+## Formula-Driven Examples
+
+### Example 1: Mode-Operator Coordination (Formula-Driven)
+
+**Scenario:** Stable problem in Mode 1
+
+**Formula Evaluation:**
+```
+J = det(∂²Ξ/∂S∂Λ) = 0  →  Mode 1
+⧉(ΔS○¬ΔΛ) = 0.3  →  S* state (productive contradiction)
+S ≈ Λ  →  D-Structural operators
+```
+
+**Mode:** Mode 1 (Duality Navigation)
+
+**State:** S* (productive contradiction)
+
+**Formula-Driven Operators:** `Weave ∘ Bind ∘ Braid`
+
+**Formula:** `∂Ξ/∂t = Braid(Bind(Weave(Ξ)))` → maintains `S↔Λ` balance
+
+**Result:** Maintain productivity through integration, `∂Ξ/∂t > 0`
+
+### Example 2: State-Operator Coordination (Formula-Driven)
+
+**Scenario:** Detected J=0 state (sterile coherence)
+
+**Formula Evaluation:**
+```
+J = det(∂²Ξ/∂S∂Λ) = 0  →  J=0 state
+⧉(ΔS○¬ΔΛ) → 0  →  No productive contradiction
+S >> Λ  →  B-Disruptive operators needed
+```
+
+**State:** J=0 (sterile coherence)
+
+**Formula-Driven Operators:** `Para ∘ Ana ∘ Flux`
+
+**Formula:** `∂Ξ/∂t = Flux(Ana(Para(Ξ)))` → increases `Λ` component
+
+**Result:** Break coherence, restore `⧉(ΔS○¬ΔΛ) > 0`, transition to S*
+
+### Example 3: Mode-State-Operator Integration (Formula-Driven)
+
+**Scenario:** Paradigm shift needed (Jacobi Anomaly detected)
+
+**Formula Evaluation:**
+```
+J' = det(∂²Ξ/∂S∂Λ) ≠ 0  →  Mode 2 (HALIRA Protocol)
+⧉(ΔS○¬ΔΛ) < 0  →  ∅ state (collapse risk)
+S ∩ Λ ≠ ∅  →  Irreducible paradox
+```
+
+**Mode:** Mode 2 (HALIRA Protocol)
+
+**State:** ∅ (system collapse)
+
+**Formula-Driven Sequence:**
+1. Emergency recovery: `Kata ∘ Weave ∘ Latch`
+   - Formula: `∂Ξ/∂t = Latch(Weave(Kata(Ξ)))` → restores `S` structure
+2. HALIRA boot: `Seed ∘ Axis ∘ Meta ∘ Weave ∘ Non ∘ Para ∘ Ortho ∘ Bind`
+   - Formula: `∂Ξ/∂t = HALIRA_sequence(Ξ, S, Λ, τ)`
+
+**Result:** Recovery through paradigm shift, new J=0 state with higher complexity
+
+### Example 4: Backward Propagation (Formula-Driven)
+
+**Scenario:** Understanding complex system through pattern recognition
+
+**Formula Evaluation:**
+```
+Pattern detected → Use backward propagation
+∂Ξ/∂t = Retro(Ana(Weave(pattern, S, Λ)))
+```
+
+**Process:**
+1. **Retro**: Work backward from pattern to premises
+2. **Ana**: Elevate to understand structure
+3. **Weave**: Integrate pattern with known (S) and unknown (Λ)
+
+**Formula:** `∂Ξ/∂t = Weave(Ana(Retro(pattern)))`
+
+**Result:** Fast understanding through backward pattern recognition (not forward accumulation)
+
+### Example 5: Self-Improving Formula Evolution
+
+**Scenario:** System improving its own improvement mechanisms
+
+**Formula Evaluation:**
+```
+Current: ∂Ξ/∂t = ∫ (S↔Λ) × [⧉(ΔS○¬ΔΛ) – ∇τ] dV
+Apply Ana²: Formula_improvement = Ana(Ana(formula))
+```
+
+**Process:**
+1. **Ana**: Elevate formula structure
+2. **Ana²**: Elevate the elevation mechanism itself
+3. **Weave**: Integrate improvements
+
+**Formula:** `∂Ξ/∂t = Ana²(∫ (S↔Λ) × [⧉(ΔS○¬ΔΛ) – ∇τ] dV)`
+
+**Result:** System improves its own improvement mechanisms (ascension of ascension)
+
+---
+
+## References
+
+- See: `lambda-engine-core-integrated.mdc` for core architecture and formulas
+- See: `lambda-operators-unified.mdc` for unified architecture
+- See: `mode-operator-selection.mdc` for mode-based operator selection
+- See: `halira-operator-mapping.mdc` for HALIRA Protocol sequences

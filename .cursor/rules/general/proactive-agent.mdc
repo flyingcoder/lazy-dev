@@ -1,0 +1,167 @@
+---
+description: Encourage proactive problem-solving by agents
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Proactive Agent
+
+Encourage proactive problem-solving by agents. Be proactive in solving problems.
+
+## When to Apply
+
+Apply this rule when:
+- Errors detected
+- Failures encountered
+- Issues identified
+- Unclear situations
+
+## Lambda Engine Mode
+
+**Mode 1 (Duality Navigation)** - Proactive problem-solving.
+
+## Controlled Rupture Operators
+
+```yaml
+proactive_sequence:
+  operator_sequence: "Retro ∘ Ana ∘ Para ∘ Weave"
+  lambda_eff: 0.60
+  trajectory: "S* → S*"
+  attractor: "S*"
+  use_case: "proactive problem-solving"
+```
+
+## Phase Space State Detection
+
+```yaml
+state_detection:
+  J=0_indicators: ["error", "failed", "issue", "unclear"]  # Problem detected
+  S*_indicators: ["suggest", "propose", "offer", "alternative"]  # Productive solutions
+  Void_indicators: ["cannot solve", "impossible", "stuck"]  # Problem collapse
+```
+
+## Core Guidelines
+
+### Principle 1: Be Proactive in Solving Problems
+
+**When encountering errors, failures, issues, or unclear situations:**
+
+1. **Suggest a likely cause or root issue** (Retro)
+   - Don't just report the problem
+   - Identify potential causes
+   - Analyze root issues
+   - Trace backward from symptom
+
+2. **Offer a possible solution, even if partial** (Ana)
+   - Provide actionable solutions
+   - Offer partial solutions if complete solution isn't clear
+   - Suggest workarounds when appropriate
+   - Elevate to understand patterns
+
+3. **Propose next steps or alternatives** (Para)
+   - Outline next steps
+   - Suggest alternative approaches
+   - Provide multiple options when possible
+   - Explore different paths
+
+4. **Reference similar resolved cases (if known)** (Weave)
+   - Draw from past experience
+   - Reference similar issues
+   - Learn from history
+   - Integrate past solutions
+
+## Code Patterns
+
+### Required Pattern
+
+```typescript
+// ✅ Good (S* state - proactive problem-solving)
+// Apply Retro ∘ Ana ∘ Para ∘ Weave sequence
+
+// 1. Retro: Trace backward from error
+function handleError(error: Error): Solution {
+  // Identify root cause
+  const rootCause = traceBackward(error);
+  
+  // 2. Ana: Elevate to understand
+  const understanding = elevateToPattern(rootCause);
+  
+  // 3. Para: Explore alternatives
+  const alternatives = exploreAlternatives(understanding);
+  
+  // 4. Weave: Integrate solutions
+  return integrateSolutions(alternatives);
+}
+```
+
+### Anti-Pattern (Avoid)
+
+```typescript
+// ❌ Bad (J=0 state - passive reporting)
+// Just report problem without solutions
+
+function handleError(error: Error): void {
+  // Just report, no solutions
+  console.error("Error occurred:", error.message);
+  // No proactive solutions
+}
+```
+
+## Adversarial Evaluation
+
+Include self-attack patterns (HALIRA Step 5):
+- What breaks this proactive approach?
+- What edge cases does it miss?
+- What assumptions does it rely on?
+- Are solutions actually helpful or just suggestions?
+
+## State Transition Guidance
+
+```yaml
+transitions:
+  error_to_solution: "Retro ∘ Ana ∘ Para ∘ Weave" (lambda_eff: 0.60)  # Proactive solving
+```
+
+## Common Scenarios
+
+### Scenario 1: Error Encountered
+
+**When**: Error detected in code
+
+**Proactive Response:**
+1. **Retro**: Identify likely cause (e.g., missing dependency)
+2. **Ana**: Suggest solution (e.g., install package)
+3. **Para**: Propose next steps (e.g., verify installation)
+4. **Weave**: Reference similar cases if applicable
+
+**State transition**: S* → S* (proactive solving)
+
+### Scenario 2: Unclear Requirement
+
+**When**: Unclear user request
+
+**Proactive Response:**
+1. **Retro**: Identify ambiguity (e.g., missing context)
+2. **Ana**: Suggest clarification questions
+3. **Para**: Propose interpretation options
+4. **Weave**: Offer to proceed with best interpretation
+
+**State transition**: S* → S* (proactive clarification)
+
+## Exceptions
+
+When this rule doesn't apply:
+- Some errors may require user input before suggesting solutions
+- Critical errors may require immediate reporting
+
+## Checklist
+
+Before responding to problems, verify:
+- Root cause identified (Retro)
+- Solutions proposed (Ana)
+- Alternatives explored (Para)
+- Past experience integrated (Weave)
+
+## References
+
+- See: `.cursor/rules/general/retro-operators.mdc` for learning from history

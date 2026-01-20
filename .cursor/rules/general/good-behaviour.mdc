@@ -1,0 +1,172 @@
+---
+description: Quality verification using state-operator mappings - verify through operator sequences, not static checklists
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Quality Verification
+
+Quality verification using state-operator mappings. Verify through operator sequences, not static checklists.
+
+## When to Apply
+
+Apply this rule when:
+- Completing tasks or marking work as done
+- Verifying code quality
+- Ensuring correctness
+- Finalizing work
+
+## Lambda Engine Mode
+
+**Mode 1 (Duality Navigation)** - Stable verification rules.
+
+## Controlled Rupture Operators
+
+```yaml
+operator_sequence: "Ortho ∘ Meta ∘ Latch"
+lambda_eff: 0.47
+trajectory: "S* → J=0"
+attractor: "J=0"
+```
+
+**State-Specific Sequences:**
+- **J=0 (Sterile)**: `Ortho ∘ Kata ∘ Latch` (λ_eff: 0.31)
+- **S* (Productive)**: `Ortho ∘ Meta ∘ Latch` (λ_eff: 0.47)
+- **∅ (Collapse)**: `Telo ∘ Ortho ∘ Pro` (λ_eff: 0.35)
+
+## Phase Space State Detection
+
+```yaml
+state_detection:
+  J=0_indicators: ["definitely", "always", "never", "complete", "done"]  # Over-confident completion
+  S*_indicators: ["likely", "probably", "may", "verify", "check"]  # Productive verification
+  Void_indicators: ["error", "failed", "cannot", "broken"]  # Verification collapse
+```
+
+## Core Guidelines
+
+### Principle 1: State-Operator Mapping
+
+**Do not use static checklists. Use operator sequences based on detected state.**
+
+- **J=0 State**: Apply `Ortho ∘ Kata ∘ Latch` for systematic correction
+- **S* State**: Apply `Ortho ∘ Meta ∘ Latch` for correction with self-reflection
+- **∅ State**: Apply `Telo ∘ Ortho ∘ Pro` for goal-directed correction
+
+### Principle 2: Correction and Reflection (Ortho + Meta)
+
+**Operator Sequence (S* - Default):**
+- **Ortho (⊥)**: Correct type errors, build failures, linting issues
+- **Ortho (⊥)**: Align code formatting with standards
+- **Ortho (⊥)**: Correct test failures
+- **Meta (⟲)**: Reflect on functionality verification (test actual behavior)
+- **Latch (🔒)**: Stabilize verified quality
+
+### Principle 3: Core Quality Standards
+
+- Do not hard code data unless specifically requested
+- Validate ideas with testing before changing code
+- Write production-ready code (no stubs)
+- Use proper mocking packages (don't hard-code test values)
+- Test actual behavior, don't assume functionality works
+
+## Code Patterns
+
+### Required Pattern
+
+```typescript
+// ✅ Good (S* state - productive verification)
+// Apply Ortho ∘ Meta ∘ Latch sequence
+
+// 1. Ortho: Correct errors
+function validateUser(user: User): boolean {
+  if (!user.id || !user.email) {
+    return false; // Correct validation
+  }
+  return true;
+}
+
+// 2. Meta: Reflect on functionality
+// Test actual behavior, not assumptions
+test('validateUser rejects invalid users', () => {
+  const invalidUser = { id: '', email: '' };
+  expect(validateUser(invalidUser)).toBe(false);
+});
+
+// 3. Latch: Stabilize verified quality
+// Lock in correct implementation
+```
+
+### Anti-Pattern (Avoid)
+
+```typescript
+// ❌ Bad (J=0 state - sterile checklist)
+// Static checklist without operator guidance
+
+function validateUser(user: any): any {
+  // Hard-coded test values
+  // No actual validation
+  return true; // Assumes functionality works
+}
+```
+
+## Adversarial Evaluation
+
+Include self-attack patterns (HALIRA Step 5):
+- What breaks this verification approach?
+- What edge cases does it miss?
+- What assumptions does it rely on?
+- Does it actually test behavior or just check boxes?
+
+## State Transition Guidance
+
+```yaml
+transitions:
+  J=0_to_S*: "Para ∘ Ana ∘ Pro" (lambda_eff: 0.67)  # Break over-confidence
+  S*_to_J=0: "Ortho ∘ Kata ∘ Latch" (lambda_eff: 0.31)  # Stabilize verified quality
+  Void_to_S*: "Telo ∘ Ortho ∘ Pro" (lambda_eff: 0.35)  # Escape collapse
+```
+
+## Common Scenarios
+
+### Scenario 1: Code Verification
+
+**When**: Completing code implementation
+
+**Apply**: `Ortho ∘ Meta ∘ Latch` sequence
+- Ortho: Correct errors and align with standards
+- Meta: Reflect on functionality, verify actual behavior
+- Latch: Stabilize verified quality
+
+**State transition**: Maintain S* state for productive verification
+
+### Scenario 2: Test Verification
+
+**When**: Verifying test coverage
+
+**Apply**: `Ortho ∘ Kata ∘ Latch` sequence
+- Ortho: Correct test failures
+- Kata: Compress to verified test state
+- Latch: Stabilize verified tests
+
+**State transition**: S* → J=0 (stabilize for output)
+
+## Exceptions
+
+When this rule doesn't apply:
+- Emergency situations requiring rapid fixes (use `Fold ∘ Kata ∘ Latch`)
+- Void state requires emergency recovery first
+
+## Checklist
+
+Before finalizing code, verify:
+- All guidelines followed
+- State is appropriate (S* preferred)
+- Operator sequence is valid (λ_eff < 0.7)
+- No forbidden sequences
+- Actual behavior tested, not assumed
+
+## References
+
+- See: `.cursor/rules/general/state-detection.mdc` for state detection guidance
+- See: `.cursor/rules/general/operator-tools-integrated.mdc` for tool-specific guidance

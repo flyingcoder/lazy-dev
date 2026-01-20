@@ -1,0 +1,182 @@
+---
+description: Operator sequence optimization and self-improvement patterns
+globs: ["**/*"]
+alwaysApply: false
+---
+
+# Operator Optimization
+
+Operator sequence optimization and self-improvement patterns.
+
+## When to Apply
+
+Apply this rule when:
+- Working with operator sequences
+- Optimizing dissipation rates
+- Creating self-improving patterns
+- Monitoring operator effectiveness
+
+## Lambda Engine Mode
+
+**Mode 1 (Duality Navigation)** - Stable optimization patterns.
+
+## Controlled Rupture Operators
+
+```yaml
+operator_sequence: "Ana ∘ Weave ∘ Kata ∘ Latch"
+lambda_eff: 0.43
+trajectory: "S* → S* → J=0"
+attractor: "J=0"
+use_case: "Self-improving operator optimization"
+```
+
+## Phase Space State Detection
+
+```yaml
+state_detection:
+  J=0_indicators: ["optimized", "effective", "stable", "improved"]
+  S*_indicators: ["operator", "sequence", "dissipation", "optimize"]
+  Void_indicators: ["ineffective", "high dissipation", "collapse"]
+```
+
+## Core Guidelines
+
+### Operator Sequence Optimization
+
+**Trigger Conditions:**
+- Block text contains: ("operator" AND "sequence") OR "dissipation"
+
+**Guidance:**
+**Operator Sequence Optimization:**
+
+Optimize operator sequences for:
+- Low dissipation (λ_eff < 0.7)
+- Desired attractor (S* preferred)
+- Avoid collapse (Void attractor)
+- Prevent over-stabilization (J=0)
+
+**Patterns:**
+- Constructive sequences: Kata ∘ Weave ∘ Latch (stable, λ_eff ≈ 0.32)
+- Exploratory sequences: Para ∘ Ana ∘ Pro (productive, λ_eff ≈ 0.67)
+- Self-aware sequences: Seed ∘ Meta ∘ Weave (reflective, λ_eff ≈ 0.47)
+
+**Monitor:**
+- Dissipation rates
+- Attractor trajectories
+- Sequence effectiveness
+- Learning from patterns
+
+### Self-Improving Patterns
+
+**Trigger Conditions:**
+- Block text contains: "improve" OR "learn" OR "optimize"
+
+**Guidance:**
+**Self-Improving Patterns (Ana- operator):**
+
+Create systems that improve themselves:
+- Learn from successful patterns
+- Replicate effective approaches
+- Elevate through better structure
+- Each improvement enables further improvement
+
+**Apply Ana² (ascension of ascension):**
+- System improves its own improvement mechanisms
+- Better understanding → better patterns → better understanding
+- Self-improving improvement loop
+
+### Operator Feedback Loop
+
+**Trigger Conditions:**
+- Block text contains: ("operator" AND "feedback") OR "effectiveness"
+
+**Guidance:**
+**Operator Feedback Loop:**
+
+Collect feedback on operator effectiveness:
+- Track operator sequences
+- Record outcomes
+- Learn from successes and failures
+- Optimize based on feedback
+
+**Use feedback to:**
+- Improve operator selection
+- Optimize sequences
+- Learn patterns
+- Enhance effectiveness
+
+## Code Patterns
+
+### Required Pattern
+
+```yaml
+# ✅ Good: Optimized sequence
+operator_sequence: "Kata ∘ Weave ∘ Latch"
+lambda_eff: 0.32  # Low dissipation, stable
+trajectory: "S* → J=0"
+attractor: "J=0"
+```
+
+### Anti-Pattern (Avoid)
+
+```yaml
+# ❌ Bad: High dissipation sequence
+operator_sequence: "Ana ∘ Para ∘ Non"
+lambda_eff: 0.77  # Too high, risk of collapse
+trajectory: "S* → ∅"  # Collapse risk
+```
+
+## Adversarial Evaluation
+
+- Is dissipation rate appropriate for the task?
+- Does sequence lead to desired attractor?
+- Are we learning from feedback?
+- Can we improve the improvement process itself?
+
+## State Transition Guidance
+
+```yaml
+transitions:
+  S*_to_J=0: "Ana ∘ Weave ∘ Kata ∘ Latch" (λ_eff: 0.43)  # Optimize and stabilize
+  J=0_to_S*: "Para ∘ Ana ∘ Weave" (λ_eff: 0.67)  # Break coherence for improvement
+```
+
+## Common Scenarios
+
+### Scenario 1: High Dissipation Sequence
+
+**Problem:** Sequence has λ_eff > 0.7, risk of collapse.
+
+**Solution:** Optimize to lower dissipation or use stabilizing operators.
+
+### Scenario 2: Ineffective Sequence
+
+**Problem:** Sequence not achieving desired outcome.
+
+**Solution:** Collect feedback, analyze effectiveness, optimize sequence.
+
+### Scenario 3: Self-Improvement
+
+**Problem:** Need system to improve itself.
+
+**Solution:** Apply Ana² pattern - improve the improvement mechanisms.
+
+## Exceptions
+
+- Some sequences may intentionally have higher dissipation for exploration
+- Feedback loops may take time to show results
+
+## Checklist
+
+Before finalizing operator sequence:
+- [ ] Dissipation rate appropriate (λ_eff < 0.7 for stability)
+- [ ] Sequence leads to desired attractor
+- [ ] Feedback loop established
+- [ ] Learning from patterns
+- [ ] Self-improvement mechanisms in place
+
+## References
+
+- See: `lambda-operators-unified.mdc` for operator reference
+- See: `mode-operator-selection.mdc` for operator selection guidance
+- See: `dissipation-lookup.mdc` for pre-calculated sequences

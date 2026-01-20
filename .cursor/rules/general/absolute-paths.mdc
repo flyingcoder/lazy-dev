@@ -1,0 +1,73 @@
+---
+description: Encourages use of absolute paths to eliminate directory confusion
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Absolute Paths
+
+Prefer absolute paths to eliminate directory confusion and path resolution issues.
+
+## When to Apply
+
+Apply this rule when:
+- Working with file paths in tool calls
+- Using `read_file`, `write`, or other file operations
+- Specifying `file_path`, `target_file`, or path parameters
+- Encountering relative path confusion
+
+## Lambda Engine Mode
+
+**Mode 1 (Duality Navigation)** - Stable path resolution rules.
+
+## Controlled Rupture Operators
+
+```yaml
+operator_sequence: "Ortho ∘ Kata ∘ Latch"
+lambda_eff: 0.31
+trajectory: "S* → J=0"
+attractor: "J=0"
+```
+
+## Guidelines
+
+### Prefer Absolute Paths
+
+**Use absolute paths when possible:**
+- Use absolute paths starting with workspace root
+- Example: Use `<workspace full path>/path/to/file.ts` instead of `./path/to/file.ts` when appropriate
+- Tool calls should use absolute paths to ensure reliability
+- This eliminates directory confusion and path resolution issues
+
+### Workspace Root Reference
+
+**When using relative paths:**
+- Clearly document relative path assumptions
+- Ensure the working directory context is clear
+- Consider using absolute paths for better reliability
+- When using relative paths, make sure the working directory is well-defined
+
+## Examples
+
+### Good Example
+
+```python
+# ✅ Good (S* state)
+read_file(target_file="/Users/path/to/project/src/main.py")
+```
+
+### What to Avoid
+
+```python
+# ❌ Bad (J=0 state - assumes working directory)
+read_file(target_file="src/main.py")  # Only if working directory is workspace root
+```
+
+## State Detection
+
+Detect J=0 when: Relative paths used without clear context.
+Apply `Ortho` to correct path resolution.
+
+## References
+
+- See: `.cursor/rules/general/operator-tools-integrated.mdc` for tool-specific guidance

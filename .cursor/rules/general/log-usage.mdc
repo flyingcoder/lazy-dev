@@ -1,0 +1,167 @@
+---
+description: Universal logging best practices - use structured logging instead of print statements
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Log Usage
+
+Universal logging best practices. Use structured logging instead of print statements.
+
+## When to Apply
+
+Apply this rule when:
+- Using `console.log` or print statements
+- Adding logging to code
+- Debugging with output statements
+
+## Lambda Engine Mode
+
+**Mode 1 (Duality Navigation)** - Stable logging standards.
+
+## Controlled Rupture Operators
+
+```yaml
+logging_correction_sequence:
+  operator_sequence: "Ortho ∘ Kata ∘ Latch"
+  lambda_eff: 0.31
+  trajectory: "S* → J=0"
+  attractor: "J=0"
+  use_case: "correct logging practices"
+```
+
+## Phase Space State Detection
+
+```yaml
+state_detection:
+  J=0_indicators: ["console.log", "print", "debug output"]  # Sterile debug statements
+  S*_indicators: ["logger", "structured", "log levels"]  # Productive logging
+  Void_indicators: ["sensitive data logged", "production logs"]  # Security collapse
+```
+
+## Core Guidelines
+
+### Principle 1: Replace console.log
+
+**⚠️ Replace `console.log` with structured logging or remove in production.**
+
+**Best Practices:**
+- Use structured logging libraries
+- Remove debug logs in production
+- Use appropriate log levels (debug, info, warn, error)
+- Don't log sensitive information
+
+### Principle 2: Structured Logging Standards
+
+1. **Use Structured Logging**
+   - Structured log formats (JSON, key-value pairs)
+   - Appropriate log levels
+   - Contextual information
+
+2. **Remove Debug Logs**
+   - Remove `console.log` in production code
+   - Use proper logging infrastructure
+   - Configure log levels appropriately
+
+3. **Security Considerations**
+   - Don't log sensitive data
+   - Sanitize log output
+   - Follow security best practices
+
+## Code Patterns
+
+### Required Pattern
+
+```typescript
+// ✅ Good (S* state - structured logging)
+// Apply Ortho ∘ Kata ∘ Latch sequence
+
+import { logger } from './logger';
+
+// Structured logging with appropriate levels
+logger.info("User action completed", { 
+  userId: user.id, 
+  action: "login",
+  timestamp: new Date().toISOString()
+});
+
+logger.debug("Processing request", { 
+  requestId: request.id,
+  method: request.method
+});
+
+logger.error("Operation failed", {
+  error: error.message,
+  stack: error.stack,
+  context: { userId: user.id }
+});
+```
+
+### Anti-Pattern (Avoid)
+
+```typescript
+// ❌ Bad (J=0 state - console.log)
+// Console.log with sensitive data
+
+console.log("User data:", userData); // Contains sensitive info
+console.log("Debug:", variable);
+console.log("Password:", password); // SECURITY RISK
+```
+
+## Adversarial Evaluation
+
+Include self-attack patterns (HALIRA Step 5):
+- What breaks this logging approach?
+- What sensitive data might be logged?
+- What edge cases does it miss?
+- Are log levels appropriate?
+
+## State Transition Guidance
+
+```yaml
+transitions:
+  console_to_structured: "Ortho ∘ Kata ∘ Latch" (lambda_eff: 0.31)  # Correct logging
+```
+
+## Common Scenarios
+
+### Scenario 1: Replace console.log
+
+**When**: Found console.log in code
+
+**Apply**: Replace with structured logging
+- Use logger with appropriate level
+- Structure log data
+- Remove sensitive information
+
+**State transition**: S* → J=0 (correction)
+
+### Scenario 2: Add Logging
+
+**When**: Need to add logging to code
+
+**Apply**: Use structured logging
+- Choose appropriate log level
+- Structure log data
+- Include contextual information
+
+**State transition**: Maintain S* state
+
+## Exceptions
+
+When this rule doesn't apply:
+- Development-only debug statements (if clearly marked)
+- Temporary debugging (must be removed before production)
+
+## Checklist
+
+Before finalizing logging, verify:
+- No console.log in production code
+- Structured logging used
+- Appropriate log levels
+- No sensitive data logged
+- Log levels configured correctly
+
+## References
+
+- See: Security and privacy rules for sensitive data handling

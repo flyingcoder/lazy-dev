@@ -1,0 +1,169 @@
+---
+description: Documents and enforces bounded search patterns to avoid infinite loops and resource waste
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Smart Search Patterns
+
+Documents and enforces bounded search patterns to avoid infinite loops and resource waste.
+
+## When to Apply
+
+Apply this rule when:
+- Using `codebase_search`, `grep`, or other search tools
+- Finding files or patterns
+- Searching for information
+- Need to locate code or documentation
+
+## Lambda Engine Mode
+
+**Mode 1 (Duality Navigation)** - Stable search patterns.
+
+## Controlled Rupture Operators
+
+```yaml
+search_optimization_sequence:
+  operator_sequence: "Kata ∘ Weave ∘ Latch"
+  lambda_eff: 0.32
+  trajectory: "S* → J=0"
+  attractor: "J=0"
+  use_case: "optimize search patterns"
+```
+
+## Phase Space State Detection
+
+```yaml
+state_detection:
+  J=0_indicators: [".*", "unbounded", "no limit", "everything"]  # Sterile unbounded searches
+  S*_indicators: ["specific", "bounded", "targeted", "limited"]  # Productive bounded searches
+  Void_indicators: ["infinite loop", "timeout", "resource exhausted"]  # Search collapse
+```
+
+## Core Guidelines
+
+### Principle 1: Bounded Searches
+
+**When searching the codebase:**
+
+1. **Use specific, bounded queries** - Avoid overly broad patterns
+2. **Set reasonable limits** (head_limit, output_mode)
+3. **Use targeted directories** when possible (target_directories)
+4. **Combine multiple search strategies** for comprehensive results
+5. **Avoid patterns that could match everything** (like `.*` without context)
+6. **Use file type filters** when appropriate (type, glob)
+7. **Don't create infinite search loops**
+
+### Principle 2: Search Strategy
+
+**Multi-Method Approach:**
+
+1. **Start with semantic search** (`codebase_search`) for understanding
+2. **Use grep** for exact string matches
+3. **Use glob_file_search** for file discovery
+4. **Read files directly** when you know the path
+5. **Check related directories** systematically
+
+**Combine approaches for thorough results.**
+
+### Principle 3: Search Best Practices
+
+1. **Be Specific**: Use targeted queries
+2. **Set Limits**: Always use reasonable limits
+3. **Filter Results**: Use file type and directory filters
+4. **Combine Methods**: Use multiple search approaches
+5. **Avoid Loops**: Don't create infinite search patterns
+
+## Code Patterns
+
+### Required Pattern
+
+```python
+# ✅ Good (S* state - bounded search)
+# Apply Kata ∘ Weave ∘ Latch sequence
+
+# Bounded, specific search
+codebase_search(
+    query="How does authentication work?",
+    target_directories=["src/auth"],
+    head_limit=10  # Bounded
+)
+
+# Specific pattern with filters
+grep(
+    pattern="def authenticate",
+    type="python",
+    head_limit=20  # Bounded
+)
+```
+
+### Anti-Pattern (Avoid)
+
+```python
+# ❌ Bad (J=0 state - unbounded search)
+# Unbounded searches without limits
+
+codebase_search(query=".*")  # Matches everything, no limit
+
+grep(pattern=".*")  # Matches everything, no limit
+```
+
+## Adversarial Evaluation
+
+Include self-attack patterns (HALIRA Step 5):
+- What breaks this search approach?
+- What edge cases does it miss?
+- Could this create infinite loops?
+- Are limits appropriate?
+
+## State Transition Guidance
+
+```yaml
+transitions:
+  unbounded_to_bounded: "Kata ∘ Weave ∘ Latch" (lambda_eff: 0.32)  # Optimize search
+```
+
+## Common Scenarios
+
+### Scenario 1: Bounded Search
+
+**When**: Need to search codebase
+
+**Apply**: Bounded search patterns
+- Specific query
+- Target directories
+- Reasonable limits
+- File type filters
+
+**State transition**: S* → J=0 (optimized search)
+
+### Scenario 2: Multi-Method Search
+
+**When**: Need comprehensive search
+
+**Apply**: Multi-method approach
+- Semantic search for understanding
+- Grep for exact matches
+- Glob for file discovery
+- Combine results
+
+**State transition**: Maintain S* state
+
+## Exceptions
+
+When this rule doesn't apply:
+- Some exploratory searches may need broader patterns
+- Discovery searches may need less filtering
+
+## Checklist
+
+Before executing search, verify:
+- Query is specific and bounded
+- Limits are set appropriately
+- Filters are applied when needed
+- No infinite loop risk
+- Multiple methods combined if needed
+
+## References
+
+- See: `operator-tools-integrated.mdc` for operator-specific tool guidance

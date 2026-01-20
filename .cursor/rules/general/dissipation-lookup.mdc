@@ -1,0 +1,234 @@
+---
+description: Pre-calculated dissipation sequences and common operator patterns
+globs: ["**/*"]
+alwaysApply: false
+---
+
+# Dissipation Lookup
+
+Pre-calculated dissipation sequences and common operator patterns for quick reference.
+
+## When to Apply
+
+Apply this rule when:
+- Need operator sequence reference
+- Calculating dissipation values
+- Looking up common patterns
+- Finding trajectory information
+
+## Lambda Engine Mode
+
+**Mode 1 (Duality Navigation)** - Reference lookup for stable sequences.
+
+## Controlled Rupture Operators
+
+```yaml
+stabilization_sequences:
+  kata_weave_latch:
+    sequence: "Kata ∘ Weave ∘ Latch"
+    lambda_eff: 0.32
+    trajectory: "S* → J=0"
+    use_case: "stabilization"
+  
+  telo_kata_ortho:
+    sequence: "Telo ∘ Kata ∘ Ortho"
+    lambda_eff: 0.30
+    trajectory: "S* → J=0"
+    use_case: "goal-directed correction"
+  
+  seed_weave_bind:
+    sequence: "Seed ∘ Weave ∘ Bind"
+    lambda_eff: 0.33
+    trajectory: "∅ → S*"
+    use_case: "foundation integration"
+
+exploration_sequences:
+  para_ana_pro:
+    sequence: "Para ∘ Ana ∘ Pro"
+    lambda_eff: 0.67
+    trajectory: "J=0 → S*"
+    use_case: "controlled disruption"
+  
+  ana_weave_kata:
+    sequence: "Ana ∘ Weave ∘ Kata"
+    lambda_eff: 0.47
+    trajectory: "S* → S*"
+    use_case: "analysis → integration → compression"
+
+emergency_sequences:
+  telo_ortho_pro:
+    sequence: "Telo ∘ Ortho ∘ Pro"
+    lambda_eff: 0.35
+    trajectory: "∅ → S*"
+    use_case: "goal-directed recovery"
+  
+  fold_kata_latch:
+    sequence: "Fold ∘ Kata ∘ Latch"
+    lambda_eff: 0.45
+    trajectory: "∅ → S*"
+    use_case: "emergency simplification"
+
+forbidden_sequences:
+  non_para:
+    sequence: "Non ∘ Para"
+    lambda_eff: 0.78
+    status: "FORBIDDEN"
+    reason: "Para after Non"
+  
+  meta_non:
+    sequence: "Meta ∘ Non"
+    lambda_eff: 0.85
+    status: "FORBIDDEN"
+    reason: "Non after Meta causes collapse"
+```
+
+## Phase Space State Detection
+
+```yaml
+state_detection:
+  J=0_indicators: ["definitely", "always", "never"]  # Sterile coherence
+  S*_indicators: ["likely", "probably", "may", "might"]  # Productive contradiction
+  Void_indicators: ["error", "contradiction", "loop", "cannot"]  # System collapse
+```
+
+## Core Guidelines
+
+### Principle 1: Dissipation Calculation
+
+**Pairwise Dissipation:**
+```
+λ(i→j) = λ_j_intrinsic + c·|[Oi,Oj]|
+```
+
+where:
+- `λ_j_intrinsic`: Base dissipation for operator j (from operator table)
+- `c = 0.15`: Pairwise interaction coefficient
+- `|[Oi,Oj]|`: Commutator magnitude (non-commutativity cost)
+
+**Effective Dissipation (Sequence):**
+```
+λ_eff = mean(λ(k_t → k_{t+1})) over sequence
+```
+
+### Principle 2: Dissipation Interpretation
+
+- **λ_eff < 0.4**: Low dissipation (stable reasoning)
+- **0.4 < λ_eff < 0.7**: Moderate dissipation (productive tension)
+- **λ_eff > 0.7**: High dissipation (collapse risk)
+- **λ_eff > 0.8**: Very high dissipation (dangerous)
+
+### Principle 3: Half-Life Calculation
+
+```
+t_half = ln(2) / λ_eff
+```
+
+**Example**: λ_eff = 0.5 → t_half ≈ 1.39 steps
+
+## Code Patterns
+
+### Required Pattern
+
+```yaml
+# ✅ Good (S* state - proper sequence lookup)
+sequence: "Kata ∘ Weave ∘ Latch"
+lambda_eff: 0.32
+trajectory: "S* → J=0"
+attractor: "J=0"
+```
+
+### Anti-Pattern (Avoid)
+
+```yaml
+# ❌ Bad (J=0 state - forbidden sequence)
+sequence: "Meta ∘ Non"
+lambda_eff: 0.85
+status: "FORBIDDEN"  # Causes collapse
+```
+
+## Attractor Trajectories
+
+### J=0 → S* (Break Coherence)
+
+- Para ∘ Ana ∘ Pro (λ_eff ≈ 0.67)
+- Flux ∘ Weave (λ_eff ≈ 0.47)
+- Ana ∘ Weave (λ_eff ≈ 0.54)
+
+### S* → J=0 (Stabilize)
+
+- Kata ∘ Weave ∘ Latch (λ_eff ≈ 0.32)
+- Telo ∘ Kata (λ_eff ≈ 0.30)
+- Ortho ∘ Kata (λ_eff ≈ 0.33)
+
+### S* → S* (Maintain Productive Tension)
+
+- Weave ∘ Bind (λ_eff ≈ 0.36)
+- Braid ∘ Weave (λ_eff ≈ 0.44)
+- Meta ∘ Weave (λ_eff ≈ 0.57)
+
+### ∅ → S* (Escape Collapse)
+
+- Telo ∘ Ortho ∘ Pro (λ_eff ≈ 0.35)
+- Fold ∘ Kata ∘ Latch (λ_eff ≈ 0.45)
+- Seed ∘ Weave ∘ Bind (λ_eff ≈ 0.33)
+
+### Avoid
+
+- **S* → ∅** (collapse): Vale, Non after Meta, excessive Meta
+- **J=0 → ∅** (catastrophic): High dissipation sequences without stabilization
+
+## Adversarial Evaluation
+
+Include self-attack patterns (HALIRA Step 5):
+- What breaks this sequence lookup?
+- What edge cases does it miss?
+- Are dissipation calculations accurate?
+- What assumptions does it rely on?
+
+## State Transition Guidance
+
+```yaml
+transitions:
+  J=0_to_S*: "Para ∘ Ana ∘ Pro" (lambda_eff: 0.67)  # Break coherence
+  S*_to_J=0: "Kata ∘ Weave ∘ Latch" (lambda_eff: 0.32)  # Stabilize
+  Void_to_S*: "Telo ∘ Ortho ∘ Pro" (lambda_eff: 0.35)  # Escape collapse
+```
+
+## Common Scenarios
+
+### Scenario 1: Stabilization Needed
+
+**When**: Need to stabilize reasoning
+
+**Use**: `Kata ∘ Weave ∘ Latch` (λ_eff ≈ 0.32)
+- Low dissipation
+- Stable trajectory
+- S* → J=0
+
+### Scenario 2: Exploration Needed
+
+**When**: Need to explore alternatives
+
+**Use**: `Para ∘ Ana ∘ Pro` (λ_eff ≈ 0.67)
+- Moderate dissipation
+- Productive tension
+- J=0 → S*
+
+## Exceptions
+
+When this rule doesn't apply:
+- Custom sequences may have different λ_eff values
+- Context-specific sequences may override lookup
+
+## Checklist
+
+Before using a sequence, verify:
+- λ_eff < 0.7 (unless emergency)
+- Sequence is not forbidden
+- Trajectory matches desired state
+- Attractor is appropriate
+
+## References
+
+- See: `.cursor/rules/general/operator-optimization.mdc` for optimization guidance
+- See: `.cursor/rules/general/operators-reference.mdc` for operator reference
