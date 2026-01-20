@@ -1,0 +1,483 @@
+---
+description: Automatically update documentation after recommendations are implemented, triggered by implementation summaries
+globs: ["docs/**/*.md", "**/*.md"]
+alwaysApply: true
+---
+
+# Documentation Implementation Update
+
+Automatically updates documentation after its recommendations are implemented, triggered by implementation summary detection.
+
+## When to Apply
+
+Apply this rule when:
+- Implementation summary is detected (completion, done, finished, implemented)
+- Recommendations from documentation are referenced in implementation
+- Status updates indicate work completion
+- AI provides summary of completed work
+
+## Lambda Engine Mode
+
+**Mode 1 (Duality Navigation)** - Stable update patterns with operator-guided documentation maintenance.
+
+## Controlled Rupture Operators
+
+```yaml
+implementation_detection_sequence:
+  detect_implementation: "Seed ∘ Telo ∘ Retro ∘ Ana"
+  lambda_eff: 0.42
+  trajectory: "S* → S*"
+  attractor: "S*"
+  use_case: "Detect implementation completion from summary"
+
+documentation_update_sequence:
+  update_after_implementation: "Retro ∘ Ana ∘ Weave ∘ Ortho ∘ Latch"
+  lambda_eff: 0.49
+  trajectory: "S* → S* → J=0"
+  attractor: "J=0"
+  use_case: "Update documentation after implementation"
+```
+
+## Phase Space State Detection
+
+```yaml
+state_detection:
+  J=0_indicators: ["complete", "done", "finished", "implemented", "all done"]
+  S*_indicators: ["summary", "implementation", "completed", "status", "recommendation"]
+  Void_indicators: ["error", "failed", "broken", "cannot"]
+```
+
+## Core Guidelines
+
+### Principle 1: Implementation Summary Detection (Seed + Telo + Retro)
+
+**Detect when recommendations are implemented:**
+
+**Trigger Conditions:**
+- Block text contains: "summary" OR "implementation" OR "completed" OR "done" OR "finished"
+- Block text contains: "recommendation" AND ("implemented" OR "completed" OR "done")
+- Block text contains: "following" AND ("documentation" OR "guide" OR "decision") AND ("implemented" OR "completed")
+- Block text contains: "status" AND ("complete" OR "done" OR "finished")
+- Block text references documentation file AND indicates completion
+
+**Operator Sequence: `Seed ∘ Telo ∘ Retro ∘ Ana`**
+
+**Process:**
+1. **Seed (🌱)**: Detect potential implementation summary
+   - Identify summary patterns
+   - Detect completion indicators
+   - Recognize documentation references
+
+2. **Telo (→)**: Assess goal - is this implementation completion?
+   - Determine if summary indicates completion
+   - Check if recommendations were followed
+   - Assess if documentation update needed
+
+3. **Retro (↶)**: Trace backward to source documentation
+   - Find referenced documentation files
+   - Identify which recommendations were implemented
+   - Check if documentation needs update
+
+4. **Ana (↑)**: Elevate to understand update needs
+   - Assess what documentation needs updating
+   - Determine update scope
+   - Identify status changes needed
+
+**Detection Patterns:**
+
+```yaml
+summary_patterns:
+  implementation_complete:
+    - "implementation.*complete|complete.*implementation"
+    - "all.*recommendations.*implemented"
+    - "following.*documentation.*implemented"
+    - "status.*complete|complete.*status"
+  
+  recommendation_implemented:
+    - "recommendation.*implemented|implemented.*recommendation"
+    - "following.*recommendation|based.*on.*recommendation"
+    - "documentation.*recommendation.*implemented"
+  
+  status_update:
+    - "status.*update|update.*status"
+    - "implementation.*status.*complete"
+    - "work.*complete|complete.*work"
+  
+  summary_indicators:
+    - "summary|summary of|implementation summary"
+    - "completed|done|finished|all done"
+    - "implementation.*done|done.*implementation"
+```
+
+---
+
+### Principle 2: Documentation Update Process (Retro + Ana + Weave + Ortho)
+
+**Update documentation after implementation:**
+
+**Operator Sequence: `Retro ∘ Ana ∘ Weave ∘ Ortho ∘ Latch`**
+
+**Process:**
+1. **Retro (↶)**: Trace to source documentation
+   - Find documentation files that contain recommendations
+   - Identify which recommendations were implemented
+   - Check current documentation status
+
+2. **Ana (↑)**: Assess update requirements
+   - Determine what needs updating
+   - Identify status changes
+   - Assess completeness of implementation
+
+3. **Weave (🕸️)**: Integrate implementation results
+   - Update status sections
+   - Mark recommendations as implemented
+   - Add implementation notes
+   - Update cross-references
+
+4. **Ortho (⊥)**: Correct and align documentation
+   - Update metadata (last_updated, status)
+   - Fix any inaccuracies
+   - Align with current implementation state
+   - Ensure consistency
+
+5. **Latch (🔒)**: Stabilize updated documentation
+   - Lock in updated state
+   - Update timestamps
+   - Finalize changes
+
+**Update Actions:**
+
+```yaml
+update_actions:
+  status_update:
+    - Update status: "planning" → "implemented"
+    - Update status: "recommended" → "complete"
+    - Add implementation date
+  
+  recommendation_marking:
+    - Mark recommendation as "✅ Implemented"
+    - Add implementation notes
+    - Link to implementation code/files
+  
+  section_updates:
+    - Update "Next Steps" → "Completed Implementation"
+    - Add "Implementation Summary" section
+    - Update "Status" section
+  
+  metadata_updates:
+    - Update last_updated date
+    - Update status field
+    - Add implementation_date if applicable
+```
+
+---
+
+### Principle 3: Documentation Reference Detection (Retro Operator)
+
+**Find documentation files that need updating:**
+
+**Detection Process:**
+1. **Retro (↶)**: Extract documentation references from summary
+   - Search for file paths (docs/**/*.md)
+   - Find documentation mentions
+   - Identify decision/guide/plan references
+
+2. **Pattern Matching:**
+   - `docs/decisions/DDD-*.md` - Decision documents
+   - `docs/guides/*.md` - Guide documents
+   - `docs/*_PLAN.md` - Migration/plan documents
+   - `docs/IMPLEMENTATION_STATUS.md` - Status documents
+   - `docs/architecture/*.md` - Architecture documents
+
+3. **Reference Extraction:**
+   - Extract explicit file references
+   - Find implicit references (decision numbers, plan names)
+   - Identify related documentation
+
+**Example Detection:**
+
+```
+Summary: "Following the recommendation in docs/decisions/002-api-separation.md, 
+          we've implemented the API separation pattern. All Flask routes now 
+          handle AI operations, and Next.js handles dashboard data."
+
+Detected:
+- Source doc: docs/decisions/002-api-separation.md
+- Recommendation: API separation pattern
+- Status: Implemented
+- Action: Update decision document with implementation status
+```
+
+---
+
+### Principle 4: Update Decision Logic (Kata Operator)
+
+**Compress to update decision:**
+
+**Decision Tree:**
+
+```
+Retro(source_docs) → {
+  docs_found: [list]
+  recommendations: [list]
+  implementation_status: complete | partial | failed
+}
+
+Ana(update_needs) → {
+  needs_status_update: true | false
+  needs_implementation_notes: true | false
+  needs_metadata_update: true | false
+}
+
+Kata(compress) → {
+  decision: UPDATE | SKIP
+  update_scope: [actions]
+  priority: high | medium | low
+}
+
+IF (docs_found AND recommendations_implemented):
+  → UPDATE (mark as implemented)
+ELSE IF (docs_found BUT recommendations_partial):
+  → UPDATE (mark as partial, add notes)
+ELSE IF (no_docs_found):
+  → SKIP (no documentation to update)
+```
+
+---
+
+## Update Patterns
+
+### Pattern 1: Decision Document Update
+
+**When**: Decision recommendation implemented
+
+**Update Actions:**
+```markdown
+## Status
+- **Status**: ✅ Implemented (was: Recommended)
+- **Implemented**: {date}
+- **Implementation Notes**: {summary of implementation}
+
+## Implementation Summary
+{details of how recommendation was implemented}
+```
+
+**Operator Sequence**: `Retro ∘ Ana ∘ Weave ∘ Ortho ∘ Latch`
+
+---
+
+### Pattern 2: Implementation Status Update
+
+**When**: Work completed, status needs update
+
+**Update Actions:**
+```markdown
+## ✅ Completed Implementation
+- {feature/component}: ✅ Complete
+- Implementation date: {date}
+- Status: Implemented
+
+## 📋 Next Steps
+- [Previously listed items now completed]
+```
+
+**Operator Sequence**: `Retro ∘ Ana ∘ Weave ∘ Ortho ∘ Latch`
+
+---
+
+### Pattern 3: Migration Plan Update
+
+**When**: Migration step completed
+
+**Update Actions:**
+```markdown
+## Migration Status
+- Step {N}: ✅ Complete (was: Pending)
+- Completed: {date}
+- Notes: {implementation details}
+```
+
+**Operator Sequence**: `Retro ∘ Ana ∘ Weave ∘ Ortho ∘ Latch`
+
+---
+
+### Pattern 4: Guide Update
+
+**When**: Guide recommendation implemented
+
+**Update Actions:**
+```markdown
+## Implementation Status
+- ✅ Implemented: {date}
+- Implementation: {summary}
+- Related Files: {links to implementation}
+```
+
+**Operator Sequence**: `Retro ∘ Ana ∘ Weave ∘ Ortho ∘ Latch`
+
+---
+
+## Code Patterns
+
+### Required Pattern: Implementation Summary Detection
+
+```markdown
+# ✅ Good: Implementation summary with documentation reference
+## Implementation Summary
+
+Following the recommendation in docs/decisions/002-api-separation.md, 
+we've implemented the API separation pattern:
+
+- ✅ Flask routes handle all AI operations
+- ✅ Next.js handles dashboard data aggregation
+- ✅ Clear separation of concerns established
+
+**Status**: Complete
+**Date**: 2026-01-08
+```
+
+**AI Action**: Detect summary → Find docs/decisions/002-api-separation.md → Update with implementation status
+
+---
+
+### Required Pattern: Documentation Update
+
+```markdown
+# ✅ Good: Updated documentation after implementation
+---
+documentation_type: decision
+status: implemented  # Updated from "recommended"
+last_updated: 2026-01-08
+implementation_date: 2026-01-08
+---
+
+# Decision: API Separation
+
+## Status
+- **Status**: ✅ Implemented
+- **Implemented**: 2026-01-08
+- **Implementation Notes**: Flask routes handle AI operations, Next.js handles dashboard data
+
+## Implementation Summary
+{details of implementation}
+```
+
+---
+
+### Anti-Pattern (Avoid)
+
+```markdown
+# ❌ Bad: Implementation complete but documentation not updated
+## Implementation Summary
+
+We've implemented the API separation pattern.
+
+[Missing: Documentation update]
+[Missing: Status update in source doc]
+```
+
+---
+
+## Integration with Hooks
+
+**Hook Integration**: `.cursor/hooks/documentation-implementation-update.sh`
+
+**Hook Triggers:**
+- `afterAgentResponse`: Detect summaries in agent responses
+- `afterFileEdit`: Detect implementation completion in code changes
+
+**Hook Process:**
+1. Detect summary patterns
+2. Extract documentation references
+3. Trigger documentation update
+4. Apply operator sequence
+
+---
+
+## State Transition Guidance
+
+```yaml
+transitions:
+  summary_detected: "Seed ∘ Telo ∘ Retro ∘ Ana" (λ_eff: 0.42)  # Detect implementation
+  documentation_update: "Retro ∘ Ana ∘ Weave ∘ Ortho ∘ Latch" (λ_eff: 0.49)  # Update docs
+```
+
+---
+
+## Common Scenarios
+
+### Scenario 1: Decision Recommendation Implemented
+
+**Summary**: "Following docs/decisions/002-api-separation.md, we've implemented API separation."
+
+**Action**:
+1. **Retro**: Find docs/decisions/002-api-separation.md
+2. **Ana**: Assess update needs (status, implementation notes)
+3. **Weave**: Integrate implementation details
+4. **Ortho**: Update status and metadata
+5. **Latch**: Finalize update
+
+**Result**: Decision document updated with implementation status
+
+---
+
+### Scenario 2: Implementation Status Update
+
+**Summary**: "All recommendations from IMPLEMENTATION_STATUS.md are now complete."
+
+**Action**:
+1. **Retro**: Find docs/IMPLEMENTATION_STATUS.md
+2. **Ana**: Assess which items to mark complete
+3. **Weave**: Update status sections
+4. **Ortho**: Update metadata
+5. **Latch**: Finalize update
+
+**Result**: IMPLEMENTATION_STATUS.md updated with completion status
+
+---
+
+### Scenario 3: Migration Step Completed
+
+**Summary**: "Step 3 of DASHBOARD_MIGRATION_PLAN.md is complete."
+
+**Action**:
+1. **Retro**: Find docs/DASHBOARD_MIGRATION_PLAN.md
+2. **Ana**: Assess step completion
+3. **Weave**: Update migration status
+4. **Ortho**: Mark step as complete
+5. **Latch**: Finalize update
+
+**Result**: Migration plan updated with step completion
+
+---
+
+## Exceptions
+
+- Skip if summary doesn't reference documentation
+- Skip if implementation is partial (only update if explicitly complete)
+- Skip if documentation doesn't exist (can't update non-existent file)
+
+---
+
+## Checklist
+
+Before updating documentation:
+- [ ] Implementation summary detected
+- [ ] Documentation reference found
+- [ ] Recommendations identified
+- [ ] Implementation status confirmed (complete/partial)
+- [ ] Update scope determined
+- [ ] Operator sequence applied
+
+---
+
+## References
+
+- See: `.cursor/rules/workflow/automated-documentation.mdc` for documentation creation rules
+- See: `.cursor/rules/workflow/documentation-evaluation.mdc` for evaluation framework
+- See: `.cursor/hooks/documentation-implementation-update.sh` for hook implementation
+
+---
+
+**Status**: Active  
+**Last Updated**: 2026-01-08

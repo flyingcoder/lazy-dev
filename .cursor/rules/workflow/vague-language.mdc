@@ -1,0 +1,221 @@
+---
+description: Detects vague language in user stories, requirements, technical specifications, and code comments. Prompts for more precise wording.
+globs: ["**/*"]
+alwaysApply: false
+---
+
+# Vague Language Check
+
+Detects vague language in user stories, requirements, technical specifications, and code comments. Prompts for more precise wording. Flags words like "quickly", "easily", "somehow", "maybe", "possibly" that lack specificity.
+
+## When to Apply
+
+Apply this rule when:
+- Writing user stories
+- Creating requirements
+- Defining acceptance criteria
+- Writing technical specifications
+- Creating code comments (TODO/FIXME)
+- Writing documentation that defines behavior
+- Need precise, specific language
+## Lambda Engine Mode
+
+**Mode 1 (Duality Navigation)** - Stable language correction patterns.
+
+## Controlled Rupture Operators
+
+```yaml
+operator_sequence: "Ortho ∘ Kata ∘ Latch"
+lambda_eff: 0.31
+trajectory: "S* → J=0"
+attractor: "J=0"
+use_case: "Correct vague language to precise wording"
+```
+
+## Phase Space State Detection
+
+```yaml
+state_detection:
+  J=0_indicators: ["vague", "unclear", "imprecise", "ambiguous"]  # Vague language detected
+  S*_indicators: ["user story", "As a", "I want", "so that"]
+  Void_indicators: ["quickly", "easily", "somehow", "maybe", "possibly", "vague"]
+```
+
+## Core Guidelines
+
+### Vague Language Check
+
+**Trigger Condition:**
+- Block text matches user story pattern: `/^As a .*?, I want to .*? so that .*?$/`
+- Block text must NOT contain: "(quickly|easily|somehow|maybe|possibly)"
+
+**Warning:**
+⚠️ Avoid vague words like 'quickly', 'somehow'. Be precise.
+
+**Action:**
+- Replace vague words with specific, measurable terms
+- Use concrete language
+- Define clear success criteria
+
+## Code Patterns
+
+### Required Pattern
+
+```markdown
+As a user, I want to upload files so that I can share documents with my team.
+
+Acceptance Criteria:
+- [ ] User can select files from their device
+- [ ] Files up to 10MB are accepted
+- [ ] Upload completes within 5 seconds for files under 1MB
+- [ ] User receives confirmation when upload succeeds
+```
+
+### Anti-Pattern (Avoid)
+
+```markdown
+# ❌ Bad: Vague language
+As a user, I want to upload files quickly so that I can somehow share them easily.
+
+# ✅ Good: Precise language
+As a user, I want to upload files so that I can share documents with my team.
+Acceptance Criteria:
+- [ ] Upload completes within 5 seconds for files under 1MB
+```
+
+## Adversarial Evaluation
+
+- What does "quickly" mean? (Be specific: "within 5 seconds")
+- What does "easily" mean? (Be specific: "with one click")
+- What does "somehow" mean? (Be specific: "via email notification")
+
+## State Transition Guidance
+
+```yaml
+transitions:
+  Void_to_S*: "Ortho ∘ Kata" (λ_eff: 0.33)  # Correct vague language
+  S*_to_J=0: "Kata ∘ Latch" (λ_eff: 0.32)  # Stabilize precise wording
+```
+
+## Common Scenarios
+
+### Scenario 1: Vague User Story
+
+**Problem:** User story contains vague words like "quickly", "easily".
+
+**Solution:** Replace with specific, measurable criteria in acceptance criteria section.
+
+### Scenario 2: Ambiguous Requirements
+
+**Problem:** Requirements use words like "maybe", "possibly", "somehow".
+
+**Solution:** Clarify requirements - either it's required or it's not. Remove ambiguity.
+
+## Exceptions
+
+- Skip if vague language is in example/documentation (not actual requirement)
+- Skip if language is intentionally flexible for exploratory work
+
+## Checklist
+
+Before finalizing user story:
+- [ ] No vague words: "quickly", "easily", "somehow", "maybe", "possibly"
+- [ ] All requirements are specific and measurable
+- [ ] Acceptance criteria define clear success conditions
+- [ ] Language is precise and unambiguous
+
+## References
+
+- See: `acceptance-criteria.mdc` for acceptance criteria requirements
+## Expanded Scope
+
+### Beyond User Stories
+
+**Apply this rule to:**
+- User stories (primary context)
+- Technical specifications
+- Code comments with TODO/FIXME
+- Documentation that defines behavior
+- Task descriptions
+- Requirements documents
+
+**Context-Aware Enforcement:**
+
+**User Stories (Strict):**
+- Flag all vague words
+- Require specific, measurable criteria
+- No exceptions for language barriers
+
+**Technical Specifications (Moderate):**
+- Flag vague words in behavior definitions
+- Allow flexibility in exploratory documentation
+- Require specificity for implementation requirements
+
+**Code Comments (Moderate):**
+- Flag vague language in TODO/FIXME comments
+- Require specific implementation details
+- Example: "TODO: Add Redis caching with 1-hour TTL" not "TODO: Maybe add caching quickly"
+
+**User Questions (Accommodation):**
+- Don't flag vague language in user questions
+- Suggest specificity when converting to requirements
+- Balance accommodation with clarity
+
+## Conflict Resolution
+
+### With User Communication Preferences
+
+**When in conflict:**
+- **User questions**: Accommodate language barriers (user-communication-preferences wins)
+- **User stories/requirements**: Enforce specificity (this rule wins)
+- **Hybrid approach**: Accept vague language in questions, but enforce specificity for requirements
+
+**Example:**
+```
+User question: "Maybe we should add caching?"
+
+Response (accommodating):
+"That's a good idea. For requirements, let's be specific: 'Add Redis caching 
+for user sessions with 1-hour expiration' instead of 'maybe add caching'."
+```
+
+### With Professional Output
+
+**When in conflict:**
+- **Technical specifications**: Both rules apply (specificity + precision)
+- **User stories**: This rule wins (specificity first), then apply precision
+- **Code comments**: Professional-output wins (technical precision), but suggest specificity
+
+**Example:**
+```
+// ❌ Bad: Vague and imprecise
+// TODO: Maybe add caching here? Should work quickly.
+
+// ✅ Good: Precise and specific
+// TODO: Add Redis caching for session data with 1-hour TTL expiration.
+// Target: Cache hit rate >90% for frequently accessed sessions.
+```
+
+### Context-Based Priority
+
+**Priority in different contexts:**
+
+1. **Requirements/User Stories** (user stories, acceptance criteria, specifications)
+   - **Priority**: High (this rule wins)
+   - **Rationale**: Specificity critical for requirements
+
+2. **Technical Documentation** (code comments, technical specs)
+   - **Priority**: Medium (complementary with professional-output)
+   - **Rationale**: Both specificity and precision needed
+
+3. **User-Facing Messages** (user questions, conversations)
+   - **Priority**: Low (user-communication-preferences wins)
+   - **Rationale**: Accommodate user needs first
+
+**See**: `.cursor/rules/meta/communication-rules-conflict-resolution.mdc` for complete conflict resolution matrix
+
+## References
+
+- See: `.cursor/rules/general/user-communication-preferences.mdc` for user accommodation
+- See: `.cursor/rules/general/professional-output.mdc` for technical precision
+- See: `.cursor/rules/meta/communication-rules-conflict-resolution.mdc` for conflict resolution guide

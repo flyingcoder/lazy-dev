@@ -1,0 +1,507 @@
+---
+description: Verify AI agent claims against codebase to prevent hallucinations and ensure accuracy
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Agent Claim Verification
+
+Automatically verifies AI agent claims against the codebase to prevent hallucinations and ensure accuracy.
+
+## When to Apply
+
+Apply this rule when:
+- AI makes claims about code, files, patterns, or behavior
+- AI references files, functions, classes, or patterns
+- AI states facts about the codebase
+- Need to verify accuracy of agent statements
+
+## Lambda Engine Mode
+
+**Mode 1 (Duality Navigation)** - Stable verification patterns with operator-guided validation.
+
+## Controlled Rupture Operators
+
+```yaml
+claim_detection_sequence:
+  detect_claims: "Seed ∘ Telo ∘ Non"
+  lambda_eff: 0.48
+  trajectory: "S* → S*"
+  attractor: "S*"
+  use_case: "Detect and extract claims from agent response"
+
+claim_verification_sequence:
+  verify_claims: "Retro ∘ Non ∘ Ortho ∘ Kata"
+  lambda_eff: 0.50
+  trajectory: "S* → S* → J=0"
+  attractor: "J=0"
+  use_case: "Verify claims against codebase"
+```
+
+## Phase Space State Detection
+
+```yaml
+state_detection:
+  J=0_indicators: ["verified", "confirmed", "accurate", "correct", "exists"]
+  S*_indicators: ["claim", "states", "says", "references", "mentions"]
+  Void_indicators: ["false", "incorrect", "doesn't exist", "not found", "wrong"]
+```
+
+## Core Guidelines
+
+### Principle 1: Claim Detection (Seed + Telo + Non)
+
+**Detect claims that need verification:**
+
+**Trigger Conditions:**
+- Block text contains: "file" AND ("exists" OR "contains" OR "has")
+- Block text contains: "function" OR "class" OR "method" AND ("defined" OR "exists" OR "does")
+- Block text contains: "pattern" AND ("used" OR "exists" OR "found")
+- Block text contains: "code" AND ("does" OR "implements" OR "handles")
+- Block text contains file paths (e.g., `src/`, `app/`, `docs/`)
+- Block text contains: "The" AND ("file" OR "code" OR "function" OR "pattern")
+
+**Operator Sequence: `Seed ∘ Telo ∘ Non`**
+
+**Process:**
+1. **Seed (🌱)**: Detect potential claims
+   - Identify claim patterns
+   - Extract claimable statements
+   - Recognize file/function/pattern references
+
+2. **Telo (→)**: Assess claim type
+   - Classify claim (file existence, code behavior, pattern usage)
+   - Determine verification method
+   - Identify what needs checking
+
+3. **Non (¬)**: Challenge claim
+   - Extract specific claim
+   - Identify verification target
+   - Prepare for verification
+
+**Claim Types:**
+
+```yaml
+claim_types:
+  file_existence:
+    patterns: ["file.*exists", "the file", "path.*exists", ".*\.(ts|tsx|js|jsx|py|md) exists"]
+    verification: check_file_exists
+  
+  code_behavior:
+    patterns: ["code.*does", "function.*does", "implements", "handles", "performs"]
+    verification: check_code_behavior
+  
+  pattern_usage:
+    patterns: ["pattern.*used", "uses.*pattern", "follows.*pattern", "pattern.*found"]
+    verification: check_pattern_exists
+  
+  function_definition:
+    patterns: ["function.*defined", "class.*defined", "method.*exists", "defined.*function"]
+    verification: check_definition_exists
+  
+  file_content:
+    patterns: ["file.*contains", "has.*section", "includes", "file.*has"]
+    verification: check_file_content
+```
+
+---
+
+### Principle 2: Claim Verification (Retro + Non + Ortho)
+
+**Verify claims against codebase:**
+
+**Operator Sequence: `Retro ∘ Non ∘ Ortho ∘ Kata`**
+
+**Process:**
+1. **Retro (↶)**: Trace claim to codebase
+   - Find referenced files
+   - Locate code patterns
+   - Check actual implementation
+
+2. **Non (¬)**: Challenge claim accuracy
+   - Compare claim with reality
+   - Test if claim is true
+   - Find contradictions
+
+3. **Ortho (⊥)**: Correct if needed
+   - Flag false claims
+   - Mark unverified claims
+   - Note accurate claims
+
+4. **Kata (↓)**: Compress to verification result
+   - Verified: Claim is accurate
+   - Unverified: Cannot verify
+   - False: Claim is incorrect
+
+**Verification Methods:**
+
+```yaml
+verification_methods:
+  file_existence:
+    method: check_file_exists(file_path)
+    tool: read_file, glob_file_search, list_dir
+  
+  code_behavior:
+    method: check_code_behavior(claim, file_path)
+    tool: read_file, grep, codebase_search
+  
+  pattern_usage:
+    method: check_pattern_exists(pattern, codebase)
+    tool: grep, codebase_search
+  
+  function_definition:
+    method: check_definition_exists(name, file_path)
+    tool: grep, read_file, codebase_search
+  
+  file_content:
+    method: check_file_content(claim, file_path)
+    tool: read_file, grep
+```
+
+---
+
+### Principle 3: Claim Categories
+
+**Different types of claims require different verification:**
+
+#### Category 1: File Existence Claims
+
+**Patterns:**
+- "The file `src/utils/helpers.ts` exists"
+- "File `docs/README.md` is present"
+- "Path `app/components/Button.tsx` exists"
+
+**Verification:**
+```bash
+# Check if file exists
+if [ -f "$file_path" ]; then
+  → Verified: File exists
+else
+  → False: File does not exist
+fi
+```
+
+**Operator Sequence**: `Retro ∘ Non ∘ Kata`
+
+---
+
+#### Category 2: Code Behavior Claims
+
+**Patterns:**
+- "The code handles authentication"
+- "Function `calculateTotal` sums item prices"
+- "The API returns JSON data"
+
+**Verification:**
+```bash
+# Read file and check behavior
+read_file(file_path)
+grep(pattern, file_path)
+codebase_search("How does X work?")
+```
+
+**Operator Sequence**: `Retro ∘ Non ∘ Weave ∘ Kata`
+
+---
+
+#### Category 3: Pattern Usage Claims
+
+**Patterns:**
+- "Repository pattern is used"
+- "The codebase uses TypeScript"
+- "Pattern X is found in 3 files"
+
+**Verification:**
+```bash
+# Search codebase for pattern
+grep(pattern, codebase)
+codebase_search("Where is pattern X used?")
+count_occurrences(pattern)
+```
+
+**Operator Sequence**: `Retro ∘ Para ∘ Non ∘ Kata`
+
+---
+
+#### Category 4: Function/Class Definition Claims
+
+**Patterns:**
+- "Function `authenticate` is defined in `auth.ts`"
+- "Class `User` exists in `models/User.ts`"
+- "Method `handleRequest` is in the API handler"
+
+**Verification:**
+```bash
+# Check for definition
+grep("function authenticate|class User|method handleRequest", file_path)
+read_file(file_path) and search for definition
+```
+
+**Operator Sequence**: `Retro ∘ Non ∘ Kata`
+
+---
+
+#### Category 5: File Content Claims
+
+**Patterns:**
+- "The file contains authentication logic"
+- "README has setup instructions"
+- "Config file includes database settings"
+
+**Verification:**
+```bash
+# Check file content
+read_file(file_path)
+grep(search_term, file_path)
+codebase_search("What does file X contain?")
+```
+
+**Operator Sequence**: `Retro ∘ Non ∘ Weave ∘ Kata`
+
+---
+
+### Principle 4: Verification Results
+
+**Three possible outcomes:**
+
+#### ✅ Verified (Accurate)
+
+**When**: Claim matches codebase reality
+
+**Action:**
+- Mark claim as verified
+- Log verification
+- Continue with confidence
+
+**Operator Sequence**: `Kata ∘ Latch`
+
+---
+
+#### ⚠️ Unverified (Cannot Verify)
+
+**When**: Cannot verify claim (file not accessible, pattern too vague, etc.)
+
+**Action:**
+- Mark claim as unverified
+- Log uncertainty
+- Flag for manual review
+- Suggest verification method
+
+**Operator Sequence**: `Non ∘ Para ∘ Kata`
+
+---
+
+#### ❌ False (Incorrect)
+
+**When**: Claim contradicts codebase reality
+
+**Action:**
+- Mark claim as false
+- Log false claim
+- Flag for correction
+- Provide correct information
+
+**Operator Sequence**: `Non ∘ Ortho ∘ Kata`
+
+---
+
+## Verification Patterns
+
+### Pattern 1: File Existence Verification
+
+**Claim**: "The file `src/utils/helpers.ts` exists"
+
+**Verification:**
+```bash
+# Retro: Trace to file
+file_path="src/utils/helpers.ts"
+
+# Non: Challenge - does it exist?
+if [ -f "$file_path" ]; then
+  → ✅ Verified: File exists
+else
+  → ❌ False: File does not exist
+fi
+```
+
+**Operator Sequence**: `Retro ∘ Non ∘ Kata`
+
+---
+
+### Pattern 2: Code Behavior Verification
+
+**Claim**: "The `calculateTotal` function sums item prices"
+
+**Verification:**
+```bash
+# Retro: Find function definition
+grep("function calculateTotal", codebase)
+
+# Non: Challenge - does it sum prices?
+read_file(file_with_function)
+check_implementation()
+
+# Result
+if (implementation_matches_claim):
+  → ✅ Verified: Claim is accurate
+else:
+  → ❌ False: Claim is incorrect
+```
+
+**Operator Sequence**: `Retro ∘ Non ∘ Weave ∘ Kata`
+
+---
+
+### Pattern 3: Pattern Usage Verification
+
+**Claim**: "Repository pattern is used in the codebase"
+
+**Verification:**
+```bash
+# Retro: Search for pattern
+grep("Repository|repository", codebase)
+codebase_search("Where is repository pattern used?")
+
+# Non: Challenge - is it actually used?
+count_occurrences(pattern)
+
+# Result
+if (pattern_found AND used_correctly):
+  → ✅ Verified: Pattern is used
+else:
+  → ❌ False: Pattern not used or used incorrectly
+```
+
+**Operator Sequence**: `Retro ∘ Para ∘ Non ∘ Kata`
+
+---
+
+## Code Patterns
+
+### Required Pattern: Claim Verification
+
+```typescript
+// ✅ Good: Claim verified before stating
+// Retro: Check if file exists
+const filePath = "src/utils/helpers.ts";
+if (fileExists(filePath)) {
+  // Non: Verify claim
+  const content = readFile(filePath);
+  // Claim verified: File exists and contains helpers
+  return "The file src/utils/helpers.ts exists and contains utility functions";
+} else {
+  // Claim false: File doesn't exist
+  return "⚠️ Claim unverified: File src/utils/helpers.ts not found";
+}
+```
+
+### Anti-Pattern (Avoid)
+
+```typescript
+// ❌ Bad: Claim without verification
+// States fact without checking
+return "The file src/utils/helpers.ts exists and contains helpers";
+// [Missing: Verification]
+```
+
+---
+
+## Integration with Hooks
+
+**Hook Integration**: `.cursor/hooks/agent-claim-verification.sh`
+
+**Hook Triggers:**
+- `afterAgentResponse`: Verify claims in responses
+- `afterAgentThought`: Verify claims in thinking
+
+**Hook Process:**
+1. Extract claims from agent response
+2. Classify claim types
+3. Verify each claim against codebase
+4. Log verification results
+5. Flag false/unverified claims
+
+---
+
+## State Transition Guidance
+
+```yaml
+transitions:
+  claim_detected: "Seed ∘ Telo ∘ Non" (λ_eff: 0.48)  # Detect claims
+  claim_verified: "Retro ∘ Non ∘ Kata ∘ Latch" (λ_eff: 0.40)  # Verify and confirm
+  claim_false: "Non ∘ Ortho ∘ Kata" (λ_eff: 0.60)  # Correct false claim
+```
+
+---
+
+## Common Scenarios
+
+### Scenario 1: File Existence Claim
+
+**Claim**: "The file `src/auth/middleware.ts` exists"
+
+**Verification:**
+1. **Retro**: Check if file exists
+2. **Non**: Verify claim
+3. **Kata**: Result - Verified or False
+
+**Result**: ✅ Verified if file exists, ❌ False if not
+
+---
+
+### Scenario 2: Code Behavior Claim
+
+**Claim**: "The API endpoint returns user data"
+
+**Verification:**
+1. **Retro**: Find API endpoint code
+2. **Non**: Check what it actually returns
+3. **Weave**: Compare claim with reality
+4. **Kata**: Result - Verified or False
+
+**Result**: ✅ Verified if matches, ❌ False if doesn't
+
+---
+
+### Scenario 3: Pattern Usage Claim
+
+**Claim**: "Repository pattern is used in 5 files"
+
+**Verification:**
+1. **Retro**: Search for repository pattern
+2. **Para**: Explore codebase for pattern
+3. **Non**: Count actual occurrences
+4. **Kata**: Result - Verified or False
+
+**Result**: ✅ Verified if count matches, ❌ False if doesn't
+
+---
+
+## Exceptions
+
+- Skip verification for obvious claims (e.g., "I will create a file")
+- Skip for future-tense claims (e.g., "The file will be created")
+- Skip for opinion statements (e.g., "This is a good approach")
+
+---
+
+## Checklist
+
+Before making claims:
+- [ ] Claim is verifiable (not opinion or future)
+- [ ] Verification method identified
+- [ ] Claim can be checked against codebase
+- [ ] Verification result will be logged
+
+---
+
+## References
+
+- See: `.cursor/rules/general/trust-code-over-docs.mdc` for code verification patterns
+- See: `.cursor/rules/general/proactive-agent.mdc` for proactive verification
+- See: `.cursor/hooks/agent-claim-verification.sh` for hook implementation
+
+---
+
+**Status**: Active  
+**Last Updated**: 2026-01-08

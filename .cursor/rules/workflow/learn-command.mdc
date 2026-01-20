@@ -1,0 +1,240 @@
+---
+description: Defines behavior for the /learn command that creates learning documents with technical translations and non-developer explanations
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Learn Command
+
+Defines behavior for the /learn command that creates learning documents with technical translations and non-developer explanations.
+
+## When to Apply
+
+Apply this rule when:
+- User invokes `/learn <topic> [url] [relate]` command
+- Need to create learning documents
+- Researching new topics
+- Documenting knowledge for future reference
+
+## Lambda Engine Mode
+
+**Mode 1 (Duality Navigation)** - Stable documentation patterns.
+
+## Controlled Rupture Operators
+
+```yaml
+operator_sequence: "Seed ∘ Ana ∘ Weave ∘ Latch"
+lambda_eff: 0.44
+trajectory: "S* → S* → J=0"
+attractor: "J=0"
+use_case: "Create comprehensive learning documents"
+```
+
+## Phase Space State Detection
+
+```yaml
+state_detection:
+  J=0_indicators: ["complete", "created", "documented", "saved"]
+  S*_indicators: ["/learn", "research", "topic", "document"]
+  Void_indicators: ["error", "failed", "missing", "not found"]
+```
+
+## Core Guidelines
+
+### Execute /learn Command
+
+**Trigger Condition:**
+- Block text matches: `/^\/learn\s+/`
+
+**Process:**
+
+When user invokes `/learn <topic> [url] [relate]`, perform these steps:
+
+**1. Parse Command Arguments:**
+- Extract topic name (required)
+- Check if URL is provided (optional)
+- Check for `relate` option (optional)
+
+**2. Gather Information:**
+- If URL provided: Fetch and analyze content from URL
+- If no URL: Perform web search about the topic
+- Research key concepts, relationships, and technical terms
+
+**3. Generate Document Content:**
+
+**a) Technical Terms Translation Section:**
+- Format: `Technical Term = Simple English Word`
+- List ALL technical terms used in the document
+- Provide clear, simple explanations
+- Example:
+  ```
+  ## Technical Terms Translation
+  - API = Application Programming Interface = A way for programs to communicate
+  - HTTP = HyperText Transfer Protocol = The language websites use to talk
+  ```
+
+**b) Concise Explanation:**
+- Write a short but comprehensive explanation
+- Use translated terms where appropriate
+- Focus on clarity and understanding
+- Keep it concise but informative
+
+**c) Explain to a Non-Developer Section:**
+- Write in plain language
+- Use analogies and real-world examples
+- Avoid technical jargon
+- Make it accessible to someone without programming knowledge
+- Example: "Think of it like..." or "Imagine it's similar to..."
+
+**d) Project Integration Recommendations** (only if `relate` option present):
+- Analyze current project structure
+- Provide specific recommendations on integrating this knowledge
+- Include practical steps and considerations
+- Suggest code examples or architectural changes if relevant
+- Reference existing project files/patterns when applicable
+
+**4. Save Document:**
+- Sanitize topic name: lowercase, replace spaces with hyphens, remove special chars
+- Ensure directory exists: `docs/knowledge-base/`
+- Save as: `docs/knowledge-base/{sanitized-topic}.md`
+- Use proper markdown formatting
+
+**5. Document Template Structure:**
+```markdown
+# {Topic Name}
+
+## Technical Terms Translation
+
+- Term = Simple Explanation
+- Another Term = Another Simple Explanation
+
+## Explanation
+
+[Concise explanation using translated terms]
+
+## Explain to a Non-Developer
+
+[Plain language explanation with analogies]
+
+## Project Integration Recommendations
+
+[Only if `relate` option was used]
+[Specific recommendations for integrating into the project]
+```
+
+**6. Provide Feedback:**
+- Show progress: "🔍 Researching {topic}..."
+- Confirm completion: "✅ Created learning document at docs/knowledge-base/{topic}.md"
+- If file exists: Ask user if they want to overwrite
+
+**Important:**
+- Always include technical terms translation section
+- Always include non-developer explanation section
+- Only include project integration section if `relate` option is present
+- Ensure the document is well-formatted and readable
+
+## Code Patterns
+
+### Required Pattern
+
+```markdown
+# API Design
+
+## Technical Terms Translation
+
+- API = Application Programming Interface = A way for programs to communicate
+- Endpoint = URL path = A specific address where you can request information
+- Request = Asking for something = Like ordering food at a restaurant
+- Response = The answer = Like receiving your food order
+
+## Explanation
+
+APIs allow different software systems to communicate with each other...
+
+## Explain to a Non-Developer
+
+Think of an API like a restaurant menu. The menu (API) tells you what dishes (data/services) are available...
+
+## Project Integration Recommendations
+
+[Only if relate option used]
+To integrate API design patterns into this project:
+1. Review existing API routes in src/api/
+2. Consider RESTful conventions...
+```
+
+### Anti-Pattern (Avoid)
+
+```markdown
+# ❌ Bad: Missing sections
+# API Design
+
+APIs are interfaces for communication.
+
+[Missing: Technical terms translation]
+[Missing: Non-developer explanation]
+```
+
+## Adversarial Evaluation
+
+- Are all technical terms explained?
+- Is the non-developer explanation truly accessible?
+- Are integration recommendations specific and actionable?
+
+## State Transition Guidance
+
+```yaml
+transitions:
+  S*_to_J=0: "Seed ∘ Ana ∘ Weave ∘ Latch" (λ_eff: 0.44)  # Create document
+```
+
+## Common Scenarios
+
+### Scenario 1: Basic /learn Command
+
+**Command:** `/learn react-hooks`
+
+**Process:**
+1. Research React Hooks
+2. Create document with technical terms, explanation, and non-developer section
+3. Save to `docs/knowledge-base/react-hooks.md`
+
+### Scenario 2: /learn with URL
+
+**Command:** `/learn graphql https://graphql.org/learn/`
+
+**Process:**
+1. Fetch and analyze content from URL
+2. Create comprehensive document
+3. Save to `docs/knowledge-base/graphql.md`
+
+### Scenario 3: /learn with relate
+
+**Command:** `/learn repository-pattern relate`
+
+**Process:**
+1. Research repository pattern
+2. Analyze current project structure
+3. Create document with integration recommendations
+4. Save to `docs/knowledge-base/repository-pattern.md`
+
+## Exceptions
+
+- Skip project integration if `relate` option not provided
+- Skip if file exists and user declines overwrite
+
+## Checklist
+
+Before completing /learn command:
+- [ ] Topic researched thoroughly
+- [ ] Technical terms translation section included
+- [ ] Concise explanation provided
+- [ ] Non-developer explanation included
+- [ ] Project integration section (if relate option used)
+- [ ] Document saved to correct location
+- [ ] User feedback provided
+
+## References
+
+- See: `research-first-protocol.mdc` for research patterns
+- See: `cursor-commands.mdc` for command best practices

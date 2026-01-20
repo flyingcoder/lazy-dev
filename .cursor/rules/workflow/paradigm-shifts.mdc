@@ -1,0 +1,188 @@
+---
+description: Structured approach for handling foundational changes and paradigm shifts
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Paradigm Shifts
+
+Structured approach for handling foundational changes and paradigm shifts.
+
+## When to Apply
+
+Apply this rule when:
+- Architecture changes
+- Refactoring foundational systems
+- Migrating to new patterns
+- Redesigning core components
+- Rewriting or restructuring major systems
+
+## Lambda Engine Mode
+
+**Mode 2 (J'≠0 - HALIRA Protocol)** - For foundational contradictions requiring paradigm shift.
+
+## Controlled Rupture Operators
+
+```yaml
+halira_steps:
+  step_1_potentia: "Seed"  # Foundation
+  step_2_boundary: "Axis"  # Alignment
+  step_3_recursion: "Meta"  # Self-reference (max 2)
+  step_4_integration: "Weave"  # Synthesis
+  step_5_anomaly: "Non"  # Find flaw (FORBIDDEN after Meta)
+  step_6_rupture: "Para"  # Deviation if anomaly found
+  step_7_recognition: "Bind"  # Cohesion
+
+full_sequence: "Seed ∘ Axis ∘ Meta ∘ Weave ∘ Non ∘ Para ∘ Bind"
+lambda_eff: 0.58
+trajectory: "J=0 → S* → S* → J=0"
+attractor: "S*"
+use_case: "Paradigm shift for foundational changes"
+```
+
+## Phase Space State Detection
+
+```yaml
+state_detection:
+  J=0_indicators: ["complete", "stable", "recognized", "invariant"]
+  S*_indicators: ["architecture", "refactor", "migrate", "redesign", "rewrite", "restructure"]
+  Void_indicators: ["error", "broken", "contradiction", "irreducible"]
+```
+
+## Core Guidelines
+
+### Paradigm Shift Detection
+
+**Trigger Conditions:**
+- Block text contains: "architecture" OR "refactor" OR "migrate" OR "redesign"
+
+**Guidance:**
+🔄 **Paradigm Shift Protocol:**
+
+For foundational changes or architectural refactoring, follow structured approach:
+
+1. **Potentia (Understand)**: Frame the change as potential - identify tensions and requirements
+   - **Operator**: Seed (🌱)
+
+2. **Boundary (Define)**: Draw necessary distinctions - define components, constraints, relationships
+   - **Operator**: Axis (📍)
+
+3. **Recursion (Examine)**: Engage self-reference - model the model, find strange loops
+   - **Operator**: Meta (⟲) - **⚠️ Max 2 consecutive**
+
+4. **Integration**: Weave perspectives - hold competing models simultaneously
+   - **Operator**: Weave (🕸️)
+
+5. **Anomaly Detection**: Attack your own design - find irreducible flaws
+   - **Operator**: Non (¬) - **⚠️ FORBIDDEN after Meta**
+
+6. **Rupture Navigation**: If anomalies found, construct paradigm shift operator
+   - **Operator**: Para (∥)
+
+7. **Recognition**: Present result as new invariant that emerged from the process
+   - **Operator**: Bind (🔗)
+
+This ensures thorough analysis before major architectural changes.
+
+### Foundational Change Checklist
+
+**Trigger Conditions:**
+- Block text contains: "rewrite" OR "restructure" OR "rethink"
+
+**Guidance:**
+📋 **Foundational Change Checklist:**
+
+Before major rewrites or restructures:
+- Understand why current approach exists
+- Identify what problems the change solves
+- Consider impact on all dependent systems
+- Plan migration path
+- Ensure new approach truly solves the problem
+- Verify the change is necessary (not just different)
+
+## Code Patterns
+
+### Required Pattern
+
+```markdown
+# ✅ Good: Paradigm shift process
+1. Potentia: Frame change as potential
+2. Boundary: Define components and constraints
+3. Recursion: Model the model
+4. Integration: Weave perspectives
+5. Anomaly Detection: Attack design
+6. Rupture Navigation: Construct shift if needed
+7. Recognition: Present new invariant
+```
+
+### Anti-Pattern (Avoid)
+
+```markdown
+# ❌ Bad: Skip steps
+1. Understand change
+2. [SKIP: Anomaly detection]
+3. Implement change
+4. [SKIP: Recognition]
+
+# ❌ Bad: Non after Meta
+Meta → Non ← FORBIDDEN (causes collapse)
+```
+
+## Adversarial Evaluation
+
+- What irreducible flaws exist in current design?
+- Does new approach truly solve the problem?
+- What breaks with this change?
+- Is change necessary or just different?
+
+## State Transition Guidance
+
+```yaml
+transitions:
+  J=0_to_S*: "Seed ∘ Axis ∘ Meta ∘ Weave" (λ_eff: 0.46)  # Initiate shift
+  S*_to_S*: "Non ∘ Para ∘ Bind" (λ_eff: 0.64)  # Navigate shift
+  S*_to_J=0: "Bind ∘ Latch" (λ_eff: 0.34)  # Recognize new invariant
+```
+
+## Common Scenarios
+
+### Scenario 1: Architecture Refactoring
+
+**Problem:** Need to refactor core architecture.
+
+**Solution:** Apply HALIRA Protocol - understand, define, examine, integrate, detect anomalies, navigate rupture, recognize new invariant.
+
+### Scenario 2: Migration to New Pattern
+
+**Problem:** Migrating to new architectural pattern.
+
+**Solution:** Follow paradigm shift protocol - ensure change is necessary and well-understood.
+
+### Scenario 3: Major Rewrite
+
+**Problem:** Considering major rewrite.
+
+**Solution:** Use foundational change checklist - verify change is necessary, not just different.
+
+## Exceptions
+
+- Skip HALIRA for minor refactoring (use Mode 1)
+- Skip if change is clearly necessary and well-understood
+
+## Checklist
+
+Before major architectural change:
+- [ ] Potentia: Change framed as potential
+- [ ] Boundary: Components and constraints defined
+- [ ] Recursion: Self-reference examined
+- [ ] Integration: Perspectives woven
+- [ ] Anomaly Detection: Design attacked
+- [ ] Rupture Navigation: Shift constructed if needed
+- [ ] Recognition: New invariant presented
+- [ ] Impact on dependent systems considered
+- [ ] Migration path planned
+
+## References
+
+- See: `halira-protocol.mdc` for complete HALIRA Protocol
+- See: `mode-transitions.mdc` for mode transition guidance

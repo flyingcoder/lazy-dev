@@ -1,0 +1,753 @@
+---
+description: Automated documentation system using Lambda Engine operators to decide when to write, where to save, and when to deprecate documentation. CRITICAL: Includes documentation creation gate that prevents over-documentation.
+globs: ["**/*.md", "docs/**/*", "**/*.ts", "**/*.tsx", "**/*.py", "**/*.js"]
+alwaysApply: true
+priority: critical
+---
+
+# Automated Documentation System
+
+Automated documentation lifecycle management using Lambda Engine and Controlled Rupture Operators to intelligently decide when to create, where to place, and when to deprecate documentation.
+
+## When to Apply
+
+This rule always applies (`alwaysApply: true`) to continuously evaluate documentation needs throughout the codebase.
+
+## Lambda Engine Mode
+
+**Mode 1 (Duality Navigation)** - Stable documentation patterns with operator-guided decision making.
+
+## Controlled Rupture Operators
+
+```yaml
+documentation_decision_sequence:
+  new_document: "Seed ∘ Ana ∘ Weave ∘ Kata ∘ Latch"
+  lambda_eff: 0.44
+  trajectory: "S* → S* → J=0"
+  attractor: "J=0"
+  use_case: "Evaluate and create new documentation"
+
+documentation_update_sequence:
+  update_document: "Retro ∘ Ana ∘ Weave ∘ Ortho ∘ Latch"
+  lambda_eff: 0.49
+  trajectory: "S* → S* → J=0"
+  attractor: "J=0"
+  use_case: "Evaluate and update existing documentation"
+
+documentation_deprecation_sequence:
+  deprecate_document: "Retro ∘ Non ∘ Para ∘ Kata ∘ Latch"
+  lambda_eff: 0.65
+  trajectory: "J=0 → S* → J=0"
+  attractor: "J=0"
+  use_case: "Evaluate and deprecate outdated documentation"
+```
+
+## Phase Space State Detection
+
+```yaml
+state_detection:
+  J=0_indicators: ["documented", "complete", "current", "accurate"]
+  S*_indicators: ["undocumented", "missing", "decision", "architecture", "migration", "new pattern", "complex"]
+  Void_indicators: ["outdated", "deprecated", "broken", "incorrect", "obsolete"]
+```
+
+## Core Guidelines
+
+### Principle 1: Documentation Triggers (Seed Operator)
+
+**When to CREATE new documentation:**
+
+**Trigger Conditions:**
+- Major architectural decision made (architecture change, pattern adoption)
+- Complex system/component created (3+ files, non-trivial logic)
+- Migration or refactoring plan established
+- New technology/pattern adopted project-wide
+- API/contract established (interface, schema, protocol)
+- Configuration or setup process created
+- Decision made with alternatives considered
+- Process or workflow established
+- Integration between systems implemented
+- Bug fix or workaround with non-obvious reasoning
+
+**Operator Sequence: `Seed ∘ Ana ∘ Weave ∘ Kata ∘ Latch`**
+
+**Process:**
+1. **Seed (🌱)**: Establish foundation - detect documentation need
+   - Identify what needs documentation
+   - Assess complexity/value
+   - Determine if existing docs cover it
+2. **Ana (↑)**: Elevate to understand purpose
+   - Classify documentation type (decision, architecture, guide, reference)
+   - Understand audience (developers, operators, users)
+   - Identify relationships to existing docs
+3. **Weave (🕸️)**: Integrate with existing documentation
+   - Check for similar/related docs
+   - Identify cross-references needed
+   - Determine if update vs new doc
+4. **Kata (↓)**: Compress to essential structure
+   - Define clear purpose
+   - Determine appropriate location
+   - Create minimal viable documentation structure
+5. **Latch (🔒)**: Stabilize documentation
+   - Write document with metadata
+   - Update indexes/cross-references
+   - Lock in documented state
+
+**Decision Threshold:**
+- **CREATE** if: Complexity > threshold OR Decision made OR Pattern established
+- **UPDATE** if: Related doc exists and needs extension
+- **SKIP** if: Trivial OR Already documented OR Obvious from code
+
+---
+
+### ⚠️ CRITICAL: Documentation Creation Gate (Non + Telo Operators)
+
+**BEFORE creating any .md file, you MUST answer these questions:**
+
+**Operator Sequence: `Non ∘ Telo ∘ Kata`**
+
+**Process:**
+1. **Non (¬)**: Challenge the creation - is it really needed?
+   - Question if documentation is necessary
+   - Challenge assumptions about value
+   - Find contradictions with DON'T CREATE conditions
+
+2. **Telo (→)**: Assess the goal - what is the purpose?
+   - Is this answering a question? → DON'T CREATE
+   - Is this exploring/clarifying? → DON'T CREATE
+   - Is this minimal information? → DON'T CREATE
+   - Is this still planning? → DON'T CREATE
+
+3. **Kata (↓)**: Compress to decision - CREATE or DON'T CREATE
+   - If DON'T CREATE conditions apply → Answer directly, don't create file
+   - If CREATE conditions apply → Proceed with creation
+
+**MANDATORY Self-Questioning Before Creating .md Files:**
+
+**You MUST ask yourself these questions BEFORE creating any documentation file:**
+
+1. **Is the user only asking a question?**
+   - User asks: "What is X?", "How does Y work?", "Can you explain Z?"
+   - **Action**: Answer directly in chat, DON'T CREATE file
+   - **Reason**: Questions don't need documentation files
+
+2. **Does the user need clarification?**
+   - User says: "I'm not sure...", "Maybe we should...", "What do you think about...?"
+   - **Action**: Provide clarification, DON'T CREATE file
+   - **Reason**: Exploration/clarification doesn't need documentation
+
+3. **Does this need a lot of information?**
+   - Information is trivial, self-evident, or can be conveyed in a short message
+   - **Action**: Provide answer directly, DON'T CREATE file
+   - **Reason**: Minimal information doesn't warrant a dedicated file
+
+4. **Is the user still planning?**
+   - User is in early ideation, brainstorming, or planning phase
+   - No concrete decisions, designs, or implementations yet
+   - **Action**: Help with planning, DON'T CREATE file
+   - **Reason**: Planning documentation would be premature and likely change rapidly
+
+**DON'T CREATE Conditions (Answer directly instead):**
+
+❌ **DON'T CREATE if:**
+- User is asking a question (provide answer in chat)
+- User needs clarification (clarify in chat)
+- Information is minimal/trivial (short answer sufficient)
+- User is still planning (no established decisions/patterns)
+- User is exploring options (not making decisions)
+- This is a simple explanation (doesn't need a file)
+
+**CREATE Only If:**
+- ✅ Established decision made (not just exploring)
+- ✅ Pattern adopted project-wide (not just considering)
+- ✅ Complex system created (3+ files, non-trivial)
+- ✅ Migration plan established (not just planning)
+- ✅ API/contract established (not just designing)
+- ✅ Process/workflow established (not just discussing)
+
+**Self-Verification Checklist Before Creating .md File:**
+
+Before creating any documentation file, verify:
+- [ ] This is NOT just answering a question
+- [ ] This is NOT just providing clarification
+- [ ] This is NOT minimal information
+- [ ] This is NOT still in planning phase
+- [ ] This meets at least one CREATE trigger condition
+- [ ] Purpose is clear and single
+- [ ] Documentation type is identified
+- [ ] Appropriate location is determined
+
+**If any DON'T CREATE condition applies:**
+- **DO NOT create the file**
+- **Answer directly in chat instead**
+- **Provide the information the user needs without creating documentation**
+
+**This gate applies to ALL .md file creation attempts, regardless of context.**
+
+---
+
+### Principle 2: Documentation Location (Axis Operator)
+
+**Where to SAVE documentation:**
+
+**Location Decision Matrix:**
+
+**Naming Convention:**
+- **Root-level files**: UPPERCASE with underscores (e.g., `IMPLEMENTATION_STATUS.md`, `DASHBOARD_MIGRATION_PLAN.md`)
+- **Subdirectory files**: lowercase with dashes (e.g., `migration-guide.md`, `documentation-system.md`)
+
+| Document Type | Location Pattern | Example |
+|--------------|------------------|---------|
+| **Architecture Decision** | `docs/decisions/DDD-description.md` | `docs/decisions/001-triangle-architecture.md` |
+| **Implementation Status** | `docs/IMPLEMENTATION_STATUS.md` | `docs/IMPLEMENTATION_STATUS.md` (root, uppercase) |
+| **Migration Plan** | `docs/NAME_MIGRATION_PLAN.md` | `docs/DASHBOARD_MIGRATION_PLAN.md` (root, uppercase) |
+| **API Reference** | `docs/api/endpoint.md` or `apps/APP/docs/` | `docs/api/agents.md` (lowercase) |
+| **Component Guide** | `apps/APP/docs/component.md` | `apps/dashboard/docs/components.md` (lowercase) |
+| **Process/Workflow** | `docs/workflows/workflow.md` | `docs/workflows/deployment.md` (lowercase) |
+| **Configuration** | `docs/setup/topic.md` | `docs/setup/environment.md` (lowercase) |
+| **Troubleshooting** | `docs/troubleshooting/topic.md` | `docs/troubleshooting/database.md` (lowercase) |
+| **Architecture** | `docs/PROJECT_ARCHITECTURE.md` or `docs/architecture/topic.md` | `docs/PROJECT_ARCHITECTURE.md` (root, uppercase) or `docs/architecture/triangle-architecture-analysis.md` (lowercase) |
+| **Guides** | `docs/guides/topic.md` | `docs/guides/migration-guide.md` (lowercase) |
+| **Quick Reference** | `docs/QUICK_REFERENCE.md` or `docs/reference/topic.md` | `docs/QUICK_REFERENCE.md` (root, uppercase) or `docs/reference/quick-reference.md` (lowercase) |
+| **Analysis/Comparison** | `docs/topic-analysis.md` or `docs/comparison/topic.md` | `docs/architecture-comparison.md` (lowercase) |
+
+**Operator Sequence: `Axis ∘ Ana ∘ Bind`**
+
+**Process:**
+1. **Axis (📍)**: Align and orient - classify document type
+   - Determine primary category
+   - Assess relationships to existing structure
+   - Identify coordinate system (directory hierarchy)
+2. **Ana (↑)**: Elevate to understand placement context
+   - Consider audience access patterns
+   - Evaluate discoverability
+   - Assess maintainability
+3. **Bind (🔗)**: Create cohesion - determine final location
+   - Select appropriate directory
+   - Ensure naming consistency
+   - Create cross-reference links
+
+**Location Rules:**
+- **Root `docs/`**: Project-wide documentation (architecture, status, plans)
+- **`docs/decisions/`**: Architectural Decision Records (ADRs)
+- **`docs/api/`**: API documentation
+- **`docs/workflows/`**: Process documentation
+- **`docs/setup/`**: Configuration and setup guides
+- **`docs/troubleshooting/`**: Problem-solving guides
+- **`apps/APP/docs/`**: Application-specific documentation
+- **`packages/PKG/docs/`**: Package-specific documentation
+
+### Principle 3: Documentation Purpose (Kata Operator)
+
+**Documentation must have CLEAR PURPOSE:**
+
+**Required Metadata Structure:**
+
+```markdown
+---
+documentation_type: decision|architecture|guide|reference|status|migration
+purpose: Clear one-sentence purpose statement
+audience: developers|operators|users|all
+created_date: YYYY-MM-DD
+last_updated: YYYY-MM-DD
+status: active|deprecated|superseded
+related_docs: [list of related doc paths]
+lifecycle: permanent|temporary|review_on: YYYY-MM-DD
+---
+
+# Document Title
+
+## Purpose
+{Clear statement of why this document exists and what problem it solves}
+
+## Context
+{Background and circumstances that led to this documentation}
+
+## Content
+{Document content}
+
+## Related Documentation
+{Links to related docs}
+
+## Lifecycle
+- **Created**: YYYY-MM-DD
+- **Last Updated**: YYYY-MM-DD
+- **Review By**: YYYY-MM-DD (if applicable)
+- **Status**: active|deprecated|superseded
+```
+
+**Operator Sequence: `Kata ∘ Meta ∘ Latch`**
+
+**Process:**
+1. **Kata (↓)**: Compress to essential purpose
+   - Define clear, single purpose
+   - Remove ambiguity
+   - Ensure self-contained meaning
+2. **Meta (⟲)**: Self-reference - reflect on documentation structure
+   - Verify purpose is clear
+   - Check metadata completeness
+   - Ensure discoverability
+3. **Latch (🔒)**: Stabilize with metadata
+   - Add required metadata
+   - Create cross-references
+   - Lock in documented state
+
+**Purpose Requirements:**
+- ✅ Single, clear purpose statement
+- ✅ Identifiable problem it solves
+- ✅ Audience specification
+- ✅ Lifecycle tracking
+- ❌ Vague or multiple purposes
+- ❌ Missing context or rationale
+
+### Principle 4: Documentation Deprecation (Non + Para Operators)
+
+**When to DEPRECATE, MOVE TO TRASH, or DELETE documentation:**
+
+**Trigger Conditions:**
+- Referenced code/files no longer exist
+- Decision has been superseded by newer decision
+- Pattern is no longer used in codebase
+- Information is outdated and incorrect
+- Document is duplicated elsewhere
+- Technology/approach has been replaced
+- Migration is complete (migration docs)
+- Status document is stale (>30 days old without updates)
+
+**Operator Sequence: `Retro ∘ Non ∘ Para ∘ Kata ∘ Latch`**
+
+**Process:**
+1. **Retro (↶)**: Work backward to understand obsolescence
+   - Trace documentation to code/decision it describes
+   - Check if references are still valid
+   - Identify what changed
+2. **Non (¬)**: Challenge - find contradictions
+   - Compare documentation with current reality
+   - Identify discrepancies
+   - Find what breaks or is incorrect
+3. **Para (∥)**: Explore alternatives
+   - Check if info exists elsewhere
+   - Determine if update vs delete
+   - Evaluate if deprecated vs removed vs trash
+4. **Kata (↓)**: Compress to decision
+   - Deprecate with note
+   - Move to trash for review
+   - Or delete if completely obsolete
+   - Update cross-references
+5. **Latch (🔒)**: Stabilize deprecation
+   - Mark as deprecated with date
+   - Move to `docs/.trash/` if subject to deletion
+   - Update indexes
+   - Link to replacement (if exists)
+
+**Deprecation Decision Tree:**
+
+```
+IF (code/files don't exist AND no historical value):
+  → MOVE to docs/.trash/ (review 30 days, then DELETE)
+
+ELSE IF (decision superseded):
+  → MARK deprecated, link to new decision
+  → MOVE to docs/.trash/ if no longer needed
+
+ELSE IF (information outdated):
+  → MARK deprecated with note, suggest update
+  → MOVE to docs/.trash/ if cannot be updated
+
+ELSE IF (duplicated elsewhere):
+  → MOVE to docs/.trash/, update references to canonical doc
+
+ELSE IF (migration complete):
+  → MOVE to docs/.trash/ (review 30 days, then DELETE)
+
+ELSE IF (uncertain - needs review):
+  → MOVE to docs/.trash/ for 30-day review period
+
+ELSE:
+  → KEEP, schedule review
+```
+
+**Trash Location**: `docs/.trash/`
+
+**Trash Rules**:
+- ⚠️ Files in `docs/.trash/` are ignored by git (not committed)
+- ⚠️ Review files in trash within 30 days
+- ⚠️ Delete permanently after review period if not restored
+- ✅ Safe to delete - files here are subject to deletion
+
+### Principle 5: Documentation Maintenance (Meta + Weave Operators)
+
+**Continuous evaluation and improvement:**
+
+**Review Triggers:**
+- Document >30 days old without updates
+- Related code changed significantly
+- Referenced dependencies updated
+- Cross-references broken
+- Document accessed frequently (indicates importance)
+- Document never accessed (indicates possible obsolescence)
+
+**Operator Sequence: `Meta ∘ Retro ∘ Weave ∘ Ortho`**
+
+**Process:**
+1. **Meta (⟲)**: Self-reference - reflect on documentation health
+   - Assess document freshness
+   - Check cross-reference validity
+   - Evaluate completeness
+2. **Retro (↶)**: Work backward from changes
+   - Identify what changed in related code
+   - Check if documentation reflects changes
+   - Find gaps or inaccuracies
+3. **Weave (🕸️)**: Integrate updates
+   - Update documentation with changes
+   - Maintain cross-reference coherence
+   - Ensure consistency
+4. **Ortho (⊥)**: Correct and align
+   - Fix inaccuracies
+   - Align with current state
+   - Update metadata (last_updated)
+
+## Documentation Decision Algorithm
+
+### Step 1: Detection (Seed)
+
+**Scan for documentation triggers:**
+```yaml
+triggers:
+  architectural_decision:
+    - block.text contains: "architecture" AND "decision"
+    - block.text contains: "we're using" AND "because"
+    - file.created AND (file.path contains "routes" OR "components")
+  
+  complex_system:
+    - file.count > 3 AND related_files.created
+    - block.text contains: "complex" OR "non-trivial"
+    - function.complexity > threshold
+  
+  migration:
+    - block.text contains: "migrate" OR "migration plan"
+    - file.path contains "migration" OR "legacy"
+  
+  new_pattern:
+    - pattern.used_in > 3_files
+    - block.text contains: "pattern" AND "adopted"
+  
+  api_established:
+    - route.created OR endpoint.created
+    - interface.defined OR contract.established
+```
+
+### Step 2: Evaluation (Ana + Weave)
+
+**Classify and assess:**
+```yaml
+evaluation:
+  classify_type: decision|architecture|guide|reference|status|migration
+  assess_complexity: low|medium|high
+  check_existing: search_docs_for_related_content
+  determine_value: high|medium|low
+  
+decision_rules:
+  IF (value == high AND (complexity > medium OR type == decision)):
+    → CREATE documentation
+  
+  ELSE IF (related_doc_exists AND needs_extension):
+    → UPDATE existing documentation
+  
+  ELSE IF (value == low AND complexity == low):
+    → SKIP (code comments sufficient)
+```
+
+### Step 3: Location (Axis + Bind)
+
+**Determine where to save:**
+```yaml
+location_rules:
+  IF (type == decision):
+    → docs/decisions/DDD-description.md
+  
+  ELSE IF (type == status):
+    → docs/IMPLEMENTATION_STATUS.md (update)
+  
+  ELSE IF (type == migration):
+    → docs/MIGRATION_NAME_PLAN.md
+  
+  ELSE IF (app_specific):
+    → apps/APP/docs/
+  
+  ELSE IF (root_level):
+    → docs/CATEGORY_NAME.md
+```
+
+### Step 4: Creation (Kata + Latch)
+
+**Generate documentation structure:**
+```markdown
+---
+documentation_type: {type}
+purpose: {clear purpose statement}
+audience: {audience}
+created_date: {today}
+last_updated: {today}
+status: active
+related_docs: {related docs}
+lifecycle: {permanent|temporary|review_on: date}
+---
+
+# {Title}
+
+## Purpose
+{purpose}
+
+## Context
+{context}
+
+## Content
+{content}
+
+## Related Documentation
+{links}
+
+## Lifecycle
+- Created: {date}
+- Status: active
+```
+
+### Step 5: Deprecation Check (Retro + Non + Para)
+
+**Evaluate existing docs for obsolescence:**
+```yaml
+deprecation_checks:
+  code_references:
+    - check_if_referenced_files_exist
+    - verify_code_still_matches_doc
+  
+  decision_supersession:
+    - check_for_newer_decisions
+    - verify_decision_still_valid
+  
+  pattern_usage:
+    - search_codebase_for_pattern
+    - verify_pattern_still_used
+  
+  migration_completion:
+    - check_migration_status
+    - verify_migration_complete
+  
+  staleness:
+    - check_last_updated_date
+    - verify_related_code_changes
+```
+
+## Code Patterns
+
+### Required Pattern: Documentation Trigger Detection
+
+```typescript
+// ✅ Good: Documentation trigger detected
+// AI-CONTEXT: This is a major architectural decision about API separation.
+// Should create docs/decisions/002-api-separation.md
+// See: .cursor/rules/workflow/automated-documentation.mdc
+
+/**
+ * Decision: Separate AI Services (Flask) from Dashboard Data (Next.js)
+ * 
+ * Flask handles all AI operations (agents, crews, execution).
+ * Next.js handles dashboard aggregation and UI data.
+ * 
+ * Rationale: Clear separation of concerns, Flask has AI orchestration.
+ * 
+ * Document: docs/decisions/002-api-separation.md
+ */
+export async function getDashboardStats() {
+  // Implementation...
+}
+```
+
+### Required Pattern: Documentation Metadata
+
+```markdown
+---
+documentation_type: decision
+purpose: Document the decision to separate AI services from dashboard data
+audience: developers
+created_date: 2026-01-08
+last_updated: 2026-01-08
+status: active
+related_docs: 
+  - docs/DASHBOARD_MIGRATION_PLAN.md
+  - docs/IMPLEMENTATION_STATUS.md
+lifecycle: permanent
+---
+
+# Decision: API Separation (Flask vs Next.js)
+
+## Purpose
+Document the architectural decision to separate AI service operations 
+(handled by Flask) from dashboard data aggregation (handled by Next.js).
+
+## Context
+{context}
+
+## Decision
+{decision}
+
+## Related Documentation
+- [Dashboard Migration Plan](../DASHBOARD_MIGRATION_PLAN.md)
+- [Implementation Status](../IMPLEMENTATION_STATUS.md)
+```
+
+### Anti-Pattern (Avoid)
+
+```typescript
+// ❌ Bad: No documentation trigger
+// Complex system created without documentation
+// [Missing: Documentation decision and location]
+
+export class ComplexOrchestrator {
+  // 500+ lines of complex logic
+  // No documentation explaining why or how
+}
+```
+
+## State Transition Guidance
+
+```yaml
+transitions:
+  undoc_to_doc: "Seed ∘ Ana ∘ Weave ∘ Kata ∘ Latch" (λ_eff: 0.44)  # Create documentation
+  doc_to_updated: "Retro ∘ Ana ∘ Weave ∘ Ortho ∘ Latch" (λ_eff: 0.49)  # Update documentation
+  doc_to_deprecated: "Retro ∘ Non ∘ Para ∘ Kata ∘ Latch" (λ_eff: 0.65)  # Deprecate documentation
+  deprecated_to_deleted: "Retro ∘ Para ∘ Kata ∘ Latch" (λ_eff: 0.50)  # Delete obsolete docs
+```
+
+## Common Scenarios
+
+### Scenario 1: Architectural Decision Made
+
+**Trigger**: Block text contains "architecture" AND "decision" AND "we're using"
+
+**Operator Sequence**: `Seed ∘ Ana ∘ Weave ∘ Kata ∘ Latch`
+
+**Action**:
+1. **Seed**: Detect decision made
+2. **Ana**: Classify as decision doc
+3. **Weave**: Check for related decisions
+4. **Kata**: Determine location: `docs/decisions/DDD-description.md`
+5. **Latch**: Create document with metadata
+
+**Result**: New decision document created with proper structure
+
+### Scenario 2: Complex System Created
+
+**Trigger**: 3+ related files created with complex logic
+
+**Operator Sequence**: `Seed ∘ Ana ∘ Weave ∘ Kata ∘ Latch`
+
+**Action**:
+1. **Seed**: Detect complex system
+2. **Ana**: Classify as architecture/guide doc
+3. **Weave**: Check if component docs exist
+4. **Kata**: Determine location: `apps/APP/docs/COMPONENT.md`
+5. **Latch**: Create component documentation
+
+**Result**: Component documentation created
+
+### Scenario 3: Migration Plan Established
+
+**Trigger**: Block text contains "migration plan" OR file created with "migration"
+
+**Operator Sequence**: `Seed ∘ Ana ∘ Weave ∘ Kata ∘ Latch`
+
+**Action**:
+1. **Seed**: Detect migration planning
+2. **Ana**: Classify as migration doc
+3. **Weave**: Check for existing migration docs
+4. **Kata**: Determine location: `docs/MIGRATION_NAME_PLAN.md`
+5. **Latch**: Create migration plan document
+
+**Result**: Migration plan document created
+
+### Scenario 4: Outdated Documentation Detected
+
+**Trigger**: Referenced code doesn't exist OR decision superseded
+
+**Operator Sequence**: `Retro ∘ Non ∘ Para ∘ Kata ∘ Latch`
+
+**Action**:
+1. **Retro**: Trace documentation to code/decision
+2. **Non**: Identify contradictions (code doesn't match)
+3. **Para**: Explore alternatives (update vs deprecate)
+4. **Kata**: Determine action (deprecate with note)
+5. **Latch**: Mark as deprecated, update cross-references
+
+**Result**: Documentation marked as deprecated with replacement link
+
+## Documentation Lifecycle States
+
+```yaml
+lifecycle_states:
+  draft: Document being created
+  active: Document is current and accurate
+  review_needed: Document >30 days old, needs review
+  outdated: Document contains incorrect information
+  deprecated: Document superseded or no longer applicable
+  archived: Migration complete, historical reference
+  deleted: Completely obsolete, removed
+```
+
+## Documentation Index Maintenance
+
+**Auto-generate documentation index:**
+
+**Location**: `docs/README.md` or `docs/INDEX.md`
+
+**Structure**:
+```markdown
+# Documentation Index
+
+## Decisions
+- [Decision 001: Triangle Architecture](decisions/001-triangle-architecture.md) - Active
+- [Decision 002: API Separation](decisions/002-api-separation.md) - Active
+
+## Architecture
+- [Project Architecture](PROJECT_ARCHITECTURE.md) - Active
+- [Triangle Architecture Analysis](TRIANGLE_ARCHITECTURE_ANALYSIS.md) - Active
+
+## Implementation
+- [Implementation Status](IMPLEMENTATION_STATUS.md) - Active (updated 2026-01-08)
+
+## Migrations
+- [Dashboard Migration Plan](DASHBOARD_MIGRATION_PLAN.md) - Active
+
+## Deprecated
+- [Old Auth Design](deprecated/OLD_AUTH_DESIGN.md) - Deprecated (see PLAN_SUPABASE_AUTH.md)
+```
+
+## Checklist
+
+Before creating documentation:
+- [ ] Documentation trigger detected
+- [ ] Purpose is clear and single
+- [ ] Location determined (Axis operator)
+- [ ] Metadata structure defined
+- [ ] Cross-references identified
+- [ ] Lifecycle status set
+
+Before updating documentation:
+- [ ] Existing document found
+- [ ] Changes identified (Retro)
+- [ ] Update scope determined
+- [ ] Cross-references still valid
+
+Before deprecating documentation:
+- [ ] Obsolescence verified (Non)
+- [ ] Replacement identified (if exists)
+- [ ] Cross-references updated
+- [ ] Deprecation note added
+
+## References
+
+- See: `.cursor/rules/general/state-detection.mdc` for state detection guidance
+- See: `.cursor/rules/meta/rule-improvement.mdc` for pattern detection
+- See: `docs/IMPLEMENTATION_STATUS.md` for current project state
+- See: `docs/DASHBOARD_MIGRATION_PLAN.md` for migration documentation example

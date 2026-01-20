@@ -1,0 +1,119 @@
+---
+description: Universal requirement for acceptance criteria in user stories
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Acceptance Criteria
+
+Universal requirement for acceptance criteria in user stories.
+
+## When to Apply
+
+Apply this rule when:
+- Writing user stories
+- Creating feature specifications
+- Defining requirements
+- Documenting user needs
+
+## Lambda Engine Mode
+
+**Mode 1 (Duality Navigation)** - Stable requirement patterns.
+
+## Controlled Rupture Operators
+
+```yaml
+operator_sequence: "Ortho ∘ Kata ∘ Latch"
+lambda_eff: 0.31
+trajectory: "S* → J=0"
+attractor: "J=0"
+use_case: "Correct and stabilize user story format"
+```
+
+## Phase Space State Detection
+
+```yaml
+state_detection:
+  J=0_indicators: ["complete", "clear", "defined"]
+  S*_indicators: ["user story", "As a", "I want", "so that"]
+  Void_indicators: ["missing", "unclear", "vague"]
+```
+
+## Core Guidelines
+
+### Acceptance Criteria Required
+
+**Trigger Condition:**
+- Block text matches user story pattern: `/^As a .*?, I want to .*? so that .*?$/`
+
+**Requirement:**
+- Next block must contain: "Acceptance Criteria:"
+
+**Action:**
+- ⚠️ Warn: "Add 'Acceptance Criteria:' section."
+
+## Code Patterns
+
+### Required Pattern
+
+```markdown
+As a [user type], I want to [action] so that [benefit].
+
+Acceptance Criteria:
+- [ ] Criterion 1
+- [ ] Criterion 2
+- [ ] Criterion 3
+```
+
+### Anti-Pattern (Avoid)
+
+```markdown
+# ❌ Bad: Missing acceptance criteria
+As a user, I want to login so that I can access my account.
+
+[Missing: Acceptance Criteria section]
+```
+
+## Adversarial Evaluation
+
+- What edge cases should be covered?
+- What failure scenarios need criteria?
+- What success conditions are missing?
+
+## State Transition Guidance
+
+```yaml
+transitions:
+  S*_to_J=0: "Ortho ∘ Kata ∘ Latch" (λ_eff: 0.31)  # Complete user story
+```
+
+## Common Scenarios
+
+### Scenario 1: User Story Without Criteria
+
+**Problem:** User story written but no acceptance criteria.
+
+**Action:** Add "Acceptance Criteria:" section with specific, testable criteria.
+
+### Scenario 2: Vague Criteria
+
+**Problem:** Criteria exist but are too vague.
+
+**Action:** Make criteria specific, measurable, and testable.
+
+## Exceptions
+
+- Skip if block is not a user story
+- Skip if acceptance criteria already present
+
+## Checklist
+
+Before finalizing user story:
+- [ ] User story follows "As a... I want... so that..." format
+- [ ] Acceptance Criteria section present
+- [ ] Criteria are specific and testable
+- [ ] All edge cases covered
+
+## References
+
+- See: `vague-language.mdc` for avoiding vague requirements

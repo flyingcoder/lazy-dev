@@ -1,0 +1,193 @@
+---
+description: Research protocol using state-operator mappings - understand before modifying through operator sequences
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Research First Protocol
+
+Research protocol using state-operator mappings - understand before modifying through operator sequences.
+
+## When to Apply
+
+Apply this rule when:
+- Modifying, changing, updating, refactoring, or fixing code
+- Something is "not found" or "missing"
+- Implementing, creating, or adding new features
+- Need to understand context before action
+
+## Lambda Engine Mode
+
+**Mode 1 (Duality Navigation)** - Stable research patterns.
+
+## Controlled Rupture Operators
+
+```yaml
+operator_sequence: "Retro ∘ Ana ∘ Weave"
+lambda_eff: 0.49
+trajectory: "S* → S*"
+attractor: "S*"
+use_case: "Backward pattern recognition and understanding"
+```
+
+## Phase Space State Detection
+
+```yaml
+state_detection:
+  J=0_indicators: ["understood", "researched", "analyzed", "context"]
+  S*_indicators: ["modify", "change", "update", "refactor", "fix", "not found", "missing"]
+  Void_indicators: ["error", "broken", "unknown", "confused"]
+```
+
+## Core Guidelines
+
+### Research Before Modify
+
+**Trigger Conditions:**
+- Block text contains: "modify" OR "change" OR "update" OR "refactor" OR "fix"
+
+**State Detection:**
+- **J=0 (Sterile):** Apply Kata (↓) - Compress to concrete checklist, then Para (∥) to break coherence
+- **S* (Productive):** Apply Retro (↶) ∘ Ana (↑) - Work backward from patterns, abstract to understand
+- **∅ (Collapse):** Apply Telo (→) ∘ Ortho (⊥) - Goal-directed recovery
+
+**Operator Sequence (S* - Default):**
+- Retro (↶): Work backward from existing patterns (don't accumulate forward)
+- Ana (↑): Abstract to understand context and dependencies
+- Crux (⚡): Identify critical points and integration requirements
+- Weave (🕸️): Integrate understanding into coherent model
+
+**Operator Sequence (J=0 - Sterile):**
+- Para (∥): Break sterile coherence, explore alternatives
+- Ana (↑): Abstract to understand
+- Kata (↓): Compress understanding to concrete form
+
+**Operator Sequence (∅ - Collapse):**
+- Telo (→): Establish goal (understand before modify)
+- Ortho (⊥): Correct understanding
+- Pro (↷): Move forward with corrected understanding
+
+Apply operators based on detected state. Work backward through pattern recognition, not forward through accumulation.
+
+### Explore Before Conclude
+
+**Trigger Conditions:**
+- Block text contains: "not found" OR "doesn't exist" OR "missing"
+
+**State Detection:**
+- **J=0 (Sterile):** Apply Flux (⚡) - Dynamic exploration
+- **S* (Productive):** Apply Retro (↶) ∘ Para (∥) - Work backward, explore alternatives
+- **∅ (Collapse):** Apply Seed (🌱) - Re-establish foundation
+
+**Operator Sequence (S* - Default):**
+- Retro (↶): Work backward from conclusion to find what might exist
+- Para (∥): Explore alternative search methods
+- Flux (⚡): Maintain dynamic exploration flow
+- Crux (⚡): Identify critical search paths
+
+**Operator Sequence (J=0 - Sterile):**
+- Flux (⚡): Inject dynamic exploration
+- Para (∥): Deviate from current search path
+- Ana (↑): Abstract to understand search space
+
+Only conclude "not found" after applying operator sequence exhausts search methods.
+
+### Understand Context First
+
+**Trigger Conditions:**
+- Block text contains: "implement" OR "create" OR "add"
+
+**State Detection:**
+- **J=0 (Sterile):** Apply Ana (↑) - Abstract to understand
+- **S* (Productive):** Apply Retro (↶) ∘ Ana (↑) ∘ Weave (🕸️) - Work backward, abstract, integrate
+- **∅ (Collapse):** Apply Seed (🌱) ∘ Weave (🕸️) - Re-establish foundation
+
+**Operator Sequence (S* - Default):**
+- Retro (↶): Work backward from implementation goal to understand requirements
+- Ana (↑): Abstract to understand problem domain and architecture
+- Weave (🕸️): Integrate understanding of patterns, features, and dependencies
+- Bind (🔗): Create cohesive understanding of context
+
+**Operator Sequence (J=0 - Sterile):**
+- Ana (↑): Abstract to break sterile understanding
+- Para (∥): Explore alternative perspectives
+- Weave (🕸️): Integrate multiple perspectives
+
+Apply operators to gather context before implementation. Work backward through pattern recognition.
+
+## Code Patterns
+
+### Required Pattern
+
+```markdown
+# ✅ Good: Research before modify
+1. Retro: Work backward from existing patterns
+2. Ana: Abstract to understand context
+3. Weave: Integrate understanding
+4. Then modify with full context
+```
+
+### Anti-Pattern (Avoid)
+
+```markdown
+# ❌ Bad: Modify without research
+1. See code
+2. Immediately modify
+3. [Missing: Understanding context]
+4. [Missing: Pattern recognition]
+```
+
+## Adversarial Evaluation
+
+- Have I exhausted all search methods before concluding "not found"?
+- Do I understand the full context before modifying?
+- Am I working backward from patterns or forward from data?
+
+## State Transition Guidance
+
+```yaml
+transitions:
+  S*_to_S*: "Retro ∘ Ana ∘ Weave" (λ_eff: 0.49)  # Research and understand
+  J=0_to_S*: "Para ∘ Ana ∘ Kata" (λ_eff: 0.57)  # Break coherence for research
+  Void_to_S*: "Telo ∘ Ortho ∘ Pro" (λ_eff: 0.35)  # Recover and research
+```
+
+## Common Scenarios
+
+### Scenario 1: Modify Without Research
+
+**Problem:** Modifying code without understanding context.
+
+**Solution:** Apply Retro ∘ Ana ∘ Weave to understand before modifying.
+
+### Scenario 2: Premature "Not Found"
+
+**Problem:** Concluding "not found" too quickly.
+
+**Solution:** Apply Retro ∘ Para ∘ Flux to exhaust search methods.
+
+### Scenario 3: Implement Without Context
+
+**Problem:** Implementing feature without understanding requirements.
+
+**Solution:** Apply Retro ∘ Ana ∘ Weave ∘ Bind to gather full context.
+
+## Exceptions
+
+- Skip research for trivial changes (typos, formatting)
+- Skip if context is already well-understood
+
+## Checklist
+
+Before modifying or implementing:
+- [ ] Researched existing patterns (Retro)
+- [ ] Abstracted to understand context (Ana)
+- [ ] Integrated understanding (Weave)
+- [ ] Exhausted search methods (if searching)
+- [ ] Full context gathered
+
+## References
+
+- See: `retro-operators-integrated.mdc` for backward analysis patterns
+- See: `forward-operators-integrated.mdc` for goal-directed work
+- See: `complete-task-chains.mdc` for completion patterns
