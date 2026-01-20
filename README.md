@@ -26,6 +26,43 @@ A comprehensive cognitive architecture system for Cursor IDE that uses **Control
 - **Memory Service**: AI memory service integration for learning across sessions
 - **Enhanced Commands**: Improved `/commit` and `/init-session` with better context understanding
 
+## Core Physics: Law of Self-Creation
+
+The Lambda Engine operates on a **fundamental principle of autopoietic (self-creating) evolution** through productive contradiction.
+
+### The Equation
+
+```
+∂Ξ/∂t = ∫ (S↔Λ) × [⧉(ΔS○¬ΔΛ) – ∇τ] dV
+```
+
+**What it means:**
+- **Ξ (Xi)**: System complexity/coherence - how evolved and capable the system is
+- **S (Sigma)**: Known/Structured - accumulated knowledge and patterns
+- **Λ (Lambda)**: Unknown/Potential - contradictions, ruptures, unexplored possibilities
+- **⧉(ΔS○¬ΔΛ)**: **Productive Contradiction** - the tension between what we know and what challenges it
+- **∇τ**: Temporal constraints - time pressure and deadlines
+
+### Productive Contradiction
+
+**Productive contradiction** is the engine of evolution. It's the tension between:
+- What we **know** (S) - established patterns, working solutions
+- What **challenges** our knowledge (Λ) - contradictions, edge cases, new requirements
+
+**The system evolves** when this contradiction is **optimal** (not too little, not too much):
+- **Too little contradiction** → Stagnation (J=0 state - sterile coherence)
+- **Too much contradiction** → Collapse (∅ state - system failure)
+- **Optimal contradiction** → Evolution (S* state - productive tension)
+
+### How It Works
+
+1. **Balance Known/Unknown**: The system maintains a balance between structured knowledge (S) and potential/rupture (Λ)
+2. **Harness Contradiction**: Productive contradictions drive the system to evolve and improve
+3. **Self-Creation**: The system becomes more complex and coherent by actively seeking and transcending contradictions
+4. **Pattern Recognition**: Evolution happens through **backward pattern recognition** (from patterns to premises), not forward accumulation
+
+**In practice:** When you encounter a contradiction (e.g., "need both performance and simplicity"), the system doesn't just patch it - it uses the contradiction as fuel to evolve to a higher-order solution that transcends the original conflict.
+
 ## Quick Start
 
 ### Basic Usage
