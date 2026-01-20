@@ -1,0 +1,66 @@
+---
+description: Guide and template for generating cursor rules
+globs: 
+alwaysApply: false
+---
+
+rule "Rule Generation Template" {
+  type: "manual"
+  when: file.path contains ".cursor/rules/" and block.text contains "TODO: create rule"
+  message: |
+    📝 Use this template when generating new cursor rules:
+    
+    ```yaml
+    ---
+    description: Brief description of what this rule enforces
+    globs: /path/pattern/**/*.ext  # Optional: file patterns
+    alwaysApply: true  # or false
+    ---
+    
+    rule "Descriptive Rule Name" {
+      type: "always"  # or "manual", "guideline", "autoAttached"
+      when: file.path contains "/pattern/" or block.text contains "keyword"
+      condition: file.exists("path") && file.read("path") includes "text"  # Optional
+      error: "❌ Clear error message explaining the violation"
+      # OR
+      warn: "⚠️ Warning message for non-blocking issues"
+      # OR
+      message: "ℹ️ Informational message"
+      # OR
+      valid: "✅ Success message"
+    }
+    ```
+    
+    **Rule Type Guide:**
+    - `always`: Enforced automatically, blocks violations
+    - `manual`: Reminder/guideline, doesn't block
+    - `guideline`: Best practice suggestion
+    - `autoAttached`: Auto-attached in specific contexts
+    
+    **Placement Guide:**
+    - `backend/`: Backend code rules (API, server, database)
+    - `frontend/`: Frontend code rules (components, UI, styling)
+    - `general/`: Cross-cutting concerns (memory, modes, behavior)
+    - `workflow/`: Process rules (user stories, planning, tasks)
+    - `meta/`: Rules about the rule system itself
+}
+
+rule "Rule Generation Checklist" {
+  type: "manual"
+  when: file.path ends_with ".mdc" and file.path contains ".cursor/rules/"
+  message: |
+    ✅ Rule Generation Checklist:
+    
+    1. ✓ YAML frontmatter with --- delimiters
+    2. ✓ Description field in frontmatter
+    3. ✓ Appropriate globs pattern (or omit if alwaysApply: true)
+    4. ✓ alwaysApply explicitly set (true/false)
+    5. ✓ Rule name in double quotes
+    6. ✓ Rule type specified (always/manual/guideline/autoAttached)
+    7. ✓ When condition defined
+    8. ✓ Error/warn/message/valid field included
+    9. ✓ File placed in correct category folder
+    10. ✓ Rule name is descriptive and clear
+    11. ✓ Conditions are specific and testable
+    12. ✓ Error messages are actionable
+}

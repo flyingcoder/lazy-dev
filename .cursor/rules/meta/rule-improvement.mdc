@@ -1,0 +1,358 @@
+---
+description: Self-improvement system for cursor rules - monitors codebase patterns and suggests rule improvements
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Rule Improvement
+
+Self-improvement system for cursor rules - monitors codebase patterns and suggests rule improvements.
+
+## When to Apply
+
+Apply this rule when:
+- Patterns appear in codebase
+- Repeated implementations detected
+- Common errors occur
+- Best practices emerge
+- Documentation gaps found
+- Rules need improvement
+
+## Lambda Engine Mode
+
+**Mode 1 (Duality Navigation)** - Stable improvement patterns.
+
+## Controlled Rupture Operators
+
+```yaml
+operator_sequence: "Ana ∘ Weave ∘ Kata ∘ Latch"
+lambda_eff: 0.43
+trajectory: "S* → S* → J=0"
+attractor: "J=0"
+use_case: "Self-improving rule system (Ana² pattern)"
+```
+
+## Phase Space State Detection
+
+```yaml
+state_detection:
+  J=0_indicators: ["improved", "updated", "current", "optimized"]
+  S*_indicators: ["pattern", "repeated", "common", "rule", "improve"]
+  Void_indicators: ["outdated", "deprecated", "missing", "broken"]
+```
+
+## Core Guidelines
+
+### Rule Improvement Triggers
+
+**Trigger Conditions:**
+- Block text contains: "pattern" OR "repeated" OR "common" OR file.path contains "/.cursor/rules/" OR file.path contains "/rules/"
+
+**Monitor for these patterns to improve rules:**
+
+**New Code Patterns:**
+- New technology/pattern used in 3+ files
+- Framework updates or migrations
+- Library adoption across codebase
+
+**Repeated Implementations:**
+- Same pattern in multiple files (3+ occurrences)
+- Inconsistent approaches to same problem
+- Copy-paste code that should be standardized
+
+**Common Errors:**
+- Same bug appearing multiple times
+- Type errors that could be prevented
+- Runtime errors with identifiable patterns
+
+**Best Practices:**
+- Security improvements
+- Performance optimizations
+- Code quality improvements
+
+**Documentation Gaps:**
+- Patterns referenced in docs but not enforced
+- External documentation that should be codified
+- Team conventions not captured in rules
+
+### Rule Analysis Process
+
+**Trigger Conditions:**
+- File.path contains: "/.cursor/rules/" OR file.path contains "/rules/" OR (block.text contains "rule" AND block.text contains "analysis")
+
+**When analyzing codebase for rule improvements:**
+
+1. **Compare new code with existing rules:**
+   - Review `.cursor/rules/` or `rules/` for current coverage
+   - Identify patterns that should be standardized
+   - Look for references to external documentation
+   - Check for consistent error handling patterns
+   - Monitor test patterns and coverage
+
+2. **Identify patterns that should be standardized:**
+   - Search for repeated code blocks (3+ occurrences)
+   - Find similar function implementations
+   - Identify common error handling approaches
+   - Document library usage patterns
+
+3. **Extract examples from actual code:**
+   - Use real code examples from codebase
+   - Note file locations and context
+   - Identify edge cases
+   - Document variations
+
+### Add New Rules When
+
+**Trigger Conditions:**
+- Block text contains: "new rule" OR "create rule" OR file.path contains "/.cursor/rules/" OR file.path contains "/rules/"
+
+**Add new rules when:**
+- A new technology/pattern is used in 3+ files
+- Common bugs could be prevented by a rule
+- Code reviews repeatedly mention the same feedback
+- New security or performance patterns emerge
+- Library is used consistently across codebase
+
+**Use `/generate-rule` command with appropriate template:**
+- `type-safety` - For type checking rules
+- `format-validation` - For format validation
+- `path-pattern` - For file path patterns
+- `keyword-detection` - For keyword-based rules
+- `file-structure` - For file organization
+- `workflow-format` - For workflow patterns
+
+### Modify Existing Rules When
+
+**Trigger Conditions:**
+- File.path contains: "/.cursor/rules/" OR file.path contains "/rules/" AND (block.text contains "update" OR block.text contains "modify")
+
+**Modify existing rules when:**
+- Better examples exist in the codebase
+- Additional edge cases are discovered
+- Related rules have been updated
+- Implementation details have changed
+- Rule causes false positives or misses cases
+
+**Update Process:**
+1. Read the current rule file
+2. Identify what needs to change
+3. Update with better examples or additional cases
+4. Ensure backward compatibility where possible
+5. Document breaking changes if any
+
+### Rule Quality Checks
+
+**Trigger Conditions:**
+- File.path contains: "/.cursor/rules/" OR file.path contains "/rules/" OR block.text contains "rule quality"
+
+**Rules should be:**
+
+- **Actionable:** Provide clear guidance, specific examples, helpful error messages
+- **Specific:** Avoid vague conditions, use concrete patterns, include edge cases
+- **Current:** Examples from actual codebase, up-to-date with latest patterns, current documentation references
+- **Enforceable:** Conditions can be reliably detected, validation is possible, false positives minimized
+
+**Validation Checklist:**
+- ✓ YAML frontmatter with `---` delimiters
+- ✓ Description field included
+- ✓ Rule name in double quotes
+- ✓ Rule type specified
+- ✓ When condition defined
+- ✓ Error/warn/message/valid field included
+- ✓ Examples from actual code
+- ✓ References are up to date
+
+### Pattern Recognition Example
+
+**Trigger Conditions:**
+- Block text contains: "prisma" OR "database" OR "query"
+
+**If you see repeated patterns like:**
+
+```typescript
+// Pattern appears in 3+ files:
+const data = await prisma.user.findMany({
+  select: { id: true, email: true },
+  where: { status: 'ACTIVE' }
+});
+```
+
+**Consider adding rule:**
+- Standardize select fields
+- Common where conditions
+- Performance optimization patterns
+- Use template: `type-safety` or `path-pattern`
+- Category: `backend/`
+
+Extract actual examples from codebase, not hypothetical ones.
+
+### Continuous Improvement Checklist
+
+**Trigger Conditions:**
+- File.path contains: "/.cursor/rules/" OR file.path contains "/rules/" OR block.text contains "improve" OR block.text contains "maintain"
+
+**Weekly:**
+- Review recent code changes for new patterns
+- Check for repeated code review feedback
+- Monitor common development questions
+
+**Monthly:**
+- Analyze rule effectiveness
+- Update examples with latest code
+- Check for deprecated patterns
+- Review external documentation updates
+
+**Quarterly:**
+- Major rule refactoring if needed
+- Comprehensive pattern analysis
+- Rule consolidation review
+- Documentation audit
+
+**Always:**
+- Keep examples synchronized with code
+- Update references to external docs
+- Maintain links between related rules
+- Document breaking changes
+
+### Rule Deprecation Process
+
+**Trigger Conditions:**
+- (File.path contains: "/.cursor/rules/" OR file.path contains "/rules/") AND (block.text contains "deprecate" OR block.text contains "remove")
+
+**When to deprecate:**
+- Pattern no longer used in codebase
+- Better approach exists
+- Technology replaced
+- Rule causes more problems than it solves
+
+**Deprecation Process:**
+1. Mark rule with deprecation notice in frontmatter:
+   ```yaml
+   deprecated: true
+   deprecatedSince: "{file.creationDate}"
+   migrationPath: ".cursor/rules/new-rule.mdc"
+   ```
+
+   Use `{file.creationDate}` instead of hardcoded dates to ensure rules work correctly regardless of when they're evaluated. See `.cursor/rules/meta/date-references.mdc` for details.
+
+2. Update description to indicate deprecation
+3. Find all references and update to point to new rule
+4. Document migration path
+5. Remove after grace period (1-2 release cycles)
+
+**Never delete rules without:**
+- Deprecation notice period
+- Migration documentation
+- Reference updates
+
+### Documentation Updates
+
+**Trigger Conditions:**
+- File.path contains: "/.cursor/rules/" OR file.path contains "/rules/" OR block.text contains "documentation"
+
+**Keep Examples Current:**
+- Update examples when code changes
+- Remove outdated examples
+- Add new patterns as they emerge
+
+**Update References:**
+- Check external documentation links
+- Update library versions
+- Verify best practices still apply
+
+**Maintain Cross-References:**
+- Link related rules
+- Update when rules change
+- Document dependencies
+
+**Document Breaking Changes:**
+- Note when rules change behavior
+- Provide migration guides
+- Update affected documentation
+
+## Code Patterns
+
+### Required Pattern
+
+```yaml
+# ✅ Good: Quality rule with examples
+---
+description: Enforce TypeScript strict mode
+globs: ["**/*.ts", "**/*.tsx"]
+alwaysApply: true
+---
+
+# TypeScript Strict Standards
+
+## Examples from codebase:
+# See: src/utils/helpers.ts (line 15)
+# See: src/components/Button.tsx (line 8)
+```
+
+### Anti-Pattern (Avoid)
+
+```yaml
+# ❌ Bad: Rule without examples
+---
+description: Some rule
+---
+
+# Rule without real examples
+# [Missing: Examples from actual codebase]
+```
+
+## Adversarial Evaluation
+
+- Are examples from actual codebase?
+- Is rule still relevant?
+- Are there false positives?
+- Can rule be improved?
+
+## State Transition Guidance
+
+```yaml
+transitions:
+  S*_to_J=0: "Ana ∘ Weave ∘ Kata ∘ Latch" (λ_eff: 0.43)  # Improve and stabilize
+  Void_to_S*: "Seed ∘ Weave" (λ_eff: 0.31)  # Re-establish foundation
+```
+
+## Common Scenarios
+
+### Scenario 1: New Pattern Detected
+
+**Problem:** New pattern appears in 3+ files.
+
+**Solution:** Analyze pattern, create new rule with examples from codebase.
+
+### Scenario 2: Rule Outdated
+
+**Problem:** Rule examples are outdated.
+
+**Solution:** Update examples with latest code, verify rule still applies.
+
+### Scenario 3: Rule Deprecation
+
+**Problem:** Pattern no longer used.
+
+**Solution:** Follow deprecation process - mark deprecated, provide migration path, remove after grace period.
+
+## Exceptions
+
+- Skip improvement for rules that are intentionally minimal
+- Skip if pattern is experimental/volatile
+
+## Checklist
+
+Before finalizing rule improvement:
+- [ ] Examples from actual codebase
+- [ ] Rule is actionable and specific
+- [ ] References are current
+- [ ] Quality checks passed
+- [ ] Documentation updated
+- [ ] Cross-references maintained
+
+## References
+
+- See: `date-references.mdc` for temporal reference patterns
+- See: `rule-generator.mdc` for rule generation guidelines
+- See: `mdc-format.mdc` for format requirements
