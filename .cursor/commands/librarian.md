@@ -4,6 +4,8 @@
 
 Manages AI-generated documentation files by organizing, validating, categorizing, and maintaining documentation standards. Integrates with the automated documentation system to ensure AI-generated docs follow project conventions.
 
+**CRITICAL RULE**: For `apps/ai-services/` directory, only `README.md` is allowed in root. All other documentation must be in root monorepo `docs/` directory (see "Monorepo Documentation Structure Rules" section below).
+
 ## Usage
 
 ```bash
@@ -355,6 +357,54 @@ The `/librarian` command integrates with:
 - `.cursor/rules/workflow/documentation-pre-commit-validation.mdc` - Validation standards
 - `.cursor/rules/workflow/documentation-templates.mdc` - Documentation templates
 - `docs/guides/documentation-evaluation-quick-reference.md` - Quick reference guide
+
+## Monorepo Documentation Structure Rules
+
+### AI Services Documentation Location Rule
+
+**CRITICAL RULE**: For `apps/ai-services/` directory:
+
+1. **Root Level**: Only `README.md` is allowed in `apps/ai-services/` root
+   - ❌ **NO** status files (NEXT_STEPS.md, REFACTORING_STATUS.md, etc.) in root
+   - ❌ **NO** separate `docs/` folder in `apps/ai-services/`
+   - ✅ **ONLY** `README.md` in root
+
+2. **All Documentation Location**: All documentation must be in root monorepo `docs/` directory
+   - ✅ **Guides**: `docs/guides/ai-services/` (e.g., `orm-connection-guide.md`)
+   - ✅ **Migration/Status**: `docs/migration/ai-services/` (e.g., `REFACTORING_STATUS.md`, `NEXT_STEPS.md`)
+   - ✅ **Test Documentation**: `apps/ai-services/tests/` (test-specific docs can stay in tests/)
+
+3. **When Cleaning `apps/ai-services/`**:
+   - Move all `.md` files (except `README.md`) to appropriate `docs/` subdirectories
+   - Move guides to `docs/guides/ai-services/`
+   - Move status/migration docs to `docs/migration/ai-services/`
+   - Remove any `apps/ai-services/docs/` directory
+   - Update all cross-references to reflect new locations
+
+4. **Cross-Reference Updates**:
+   - Update relative paths in moved files
+   - Update references in `apps/ai-services/README.md`
+   - Update references in other documentation files
+
+**Example Structure**:
+```
+apps/ai-services/
+├── README.md ✅ (only file allowed in root)
+└── tests/
+    ├── README.md ✅ (test docs can stay)
+    └── docs/ ✅ (test-specific docs)
+
+docs/
+├── guides/
+│   └── ai-services/
+│       └── orm-connection-guide.md ✅
+└── migration/
+    └── ai-services/
+        ├── REFACTORING_STATUS.md ✅
+        ├── REFACTORING_FINAL_SUMMARY.md ✅
+        ├── REFACTORING_COMPLETE.md ✅
+        └── NEXT_STEPS.md ✅
+```
 
 **Date Verification Integration:**
 

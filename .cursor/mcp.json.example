@@ -1,12 +1,20 @@
 {
   "mcpServers": {
-    "MCP_DOCKER": {
-      "command": "docker",
+    "github-tracking": {
+      "command": "python",
       "args": [
-        "mcp",
-        "gateway",
-        "run"
-      ]
+        "-m",
+        "app.integrations.mcp.github_tracking"
+      ],
+      "env": {
+        "GITHUB_TOKEN": "${GITHUB_TOKEN}",
+        "GITHUB_OWNER": "${GITHUB_OWNER}",
+        "GITHUB_REPO": "${GITHUB_REPO}",
+        "GITHUB_PROJECT_NAME": "${GITHUB_PROJECT_NAME}",
+        "LOG_LEVEL": "${LOG_LEVEL:-INFO}",
+        "PYTHONPATH": "${PYTHONPATH:-src/backend}"
+      }
     }
   }
 }
+
