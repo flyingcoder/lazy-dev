@@ -79,6 +79,15 @@ temp/
 *.tsbuildinfo
 .tsbuildinfo
 
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.deepeval-cache.json
+.deepeval_telemetry.txt
+
 # Optional: Keep structure but ignore auto-generated rules
 # .cursor/rules/**/*.mdc
 # !.cursor/rules/meta/
