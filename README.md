@@ -1,6 +1,25 @@
-# Λ-Engine (Lambda Engine) - Cursor Rules System
+# Λ-Engine (Lambda Engine) - Cross-Tool Cognitive Architecture
 
-A comprehensive cognitive architecture system for Cursor IDE that uses **Controlled Rupture Operators** to guide AI-assisted development. This system provides adaptive problem-solving through two operational modes and 20 specialized operators.
+A cognitive architecture that uses **Controlled Rupture Operators** to guide AI-assisted development, providing adaptive problem-solving through two operational modes and 20 specialized operators. The portable core works with **Codex, Claude Code, Cursor, Windsurf, and any other AI agent**; Cursor additionally has a native, fully-featured implementation with 60+ commands and hooks.
+
+## Cross-Tool Support
+
+| Tool | Entry point | Notes |
+|---|---|---|
+| Codex (and most other agents) | [`AGENTS.md`](AGENTS.md) | Universal fallback convention |
+| Claude Code | [`CLAUDE.md`](CLAUDE.md) | Auto-imports `lambda-engine/CORE.md` |
+| Windsurf | [`.windsurfrules`](.windsurfrules) | Read by Cascade at repo root |
+| Cursor | [`.cursor/rules/`](.cursor/rules/) | Native implementation, predates the portable spec (see below) |
+
+All adapters point to **[`lambda-engine/CORE.md`](lambda-engine/CORE.md)**, the single
+source of truth for the architecture: phase-space state detection, mode
+selection, the 20-operator vocabulary, dissipation tracking, forbidden
+sequences, and the HALIRA protocol. Edit `CORE.md` when the architecture
+changes — the adapters are thin pointers and shouldn't need to change.
+
+Related material:
+- [`wiki/wiki/concepts/lambda-engine-cognitive-architecture.md`](wiki/wiki/concepts/lambda-engine-cognitive-architecture.md) — full narrative write-up and rationale, including how this generalizes beyond any single tool.
+- [`evals/lambda-engine/`](evals/lambda-engine/) — DeepEval suite that scores transcripts against the architecture's hard constraints (state/mode detection, operator sequence validity, HALIRA compliance).
 
 ## 🆕 What's New
 
@@ -145,6 +164,12 @@ The system navigates between three states:
    - `Axis` (📍): Establish alignment
 
 ## Essential Commands
+
+> Everything below this point (commands, rule files, hooks, file structure)
+> is specific to the **Cursor-native implementation** in `.cursor/`. If
+> you're using Codex, Claude Code, or Windsurf, see [`lambda-engine/CORE.md`](lambda-engine/CORE.md)
+> instead — the underlying architecture is the same, but these slash
+> commands don't exist outside Cursor.
 
 ### 🎯 Featured Commands
 
