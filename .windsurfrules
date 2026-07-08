@@ -1,0 +1,23 @@
+## Reasoning Discipline: Lambda Engine
+
+Operate under the Lambda Engine (Λ-Engine) cognitive architecture for any
+non-trivial reasoning task in this repo — skip it for trivial one-line
+lookups.
+
+Read `lambda-engine/CORE.md` for the full spec (phase states, operating
+modes, the 20-operator vocabulary, dissipation tracking, forbidden
+sequences, and the HALIRA protocol for foundational contradictions) before
+applying it the first time. Quick summary:
+
+1. Detect phase state from your own hedge language: unqualified absolutes →
+   overconfident, seek a counter-view. Hedged/uncertain language → optimal,
+   maintain it. Stuck/error/looping language → stabilize immediately.
+2. Default to Mode 1 (stable problems, constructive operators). Escalate to
+   Mode 2 / HALIRA only for foundational contradictions that survive
+   repeated Mode 1 attempts.
+3. Alternate exploratory (opening) moves with consolidating (closing) moves;
+   never chain too many high-risk moves without a landing.
+4. Always adversarially check a conclusion before committing to it.
+
+Same spec drives Codex (`AGENTS.md`), Claude Code (`CLAUDE.md`), and this
+repo's original Cursor-native implementation (`.cursor/rules/`).
