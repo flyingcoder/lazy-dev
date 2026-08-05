@@ -1,0 +1,749 @@
+#!/usr/bin/env python3
+"""Autopoetic portable installer — thin CLI driven by config.yaml."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import shutil
+import subprocess
+import sys
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any
+
+try:
+    import yaml
+except ImportError:  # pragma: no cover
+    print("error: PyYAML is required (`pip install pyyaml`)", file=sys.stderr)
+    sys.exit(1)
+
+def resolve_package_root(script_path: Path | None = None) -> Path:
+    """Resolve package root from this script's location.
+
+    Follows the real path of ``bin/autopoetic`` so checkout-linked and
+    self-contained installs both land on the directory that holds
+    ``config.yaml``. When that directory is missing (broken link install),
+    exit with a clear reinstall hint.
+    """
+    path = (script_path or Path(__file__)).resolve()
+    root = path.parent.parent
+    if not (root / "config.yaml").is_file():
+        raise SystemExit(
+            f"error: package root missing or incomplete: {root}\n"
+            "  config.yaml not found. Reinstall with "
+            "`./bin/autopoetic install` from an autopoetic-agent checkout "
+            "(or `autopoetic install --link` after restoring the checkout)."
+        )
+    return root
+
+
+PACKAGE_ROOT = resolve_package_root()
+MANIFEST_PATH = PACKAGE_ROOT / "config.yaml"
+SUPPORTED_SCHEMA = "autopoetic-portable/v2"
+INSTALL_META_NAME = ".autopoetic-install.json"
+SHARE_DIRNAME = "autopoetic"
+DEFAULT_PREFIX = Path.home() / ".local"
+
+
+@dataclass(frozen=True)
+class InstallEntry:
+    """One package source path mapped to a consumer destination path."""
+
+    source: str
+    destination: str
+
+
+def _normalize_rel(path: str, *, field: str) -> str:
+    raw = path.strip().replace("\\", "/")
+    if not raw or raw in (".", "./"):
+        raise SystemExit(f"error: empty {field} path in install entry")
+    if Path(raw).is_absolute() or raw.startswith("/"):
+        raise SystemExit(f"error: absolute {field} path not allowed: {path!r}")
+    parts = Path(raw).parts
+    if any(p == ".." for p in parts):
+        raise SystemExit(
+            f"error: parent traversal not allowed in {field} path: {path!r}"
+        )
+    return raw.rstrip("/") if raw != "/" else raw
+
+
+def parse_install_entry(raw: Any, *, context: str) -> InstallEntry:
+    if isinstance(raw, str):
+        raise SystemExit(
+            f"error: {context}: plain path strings are not supported; "
+            "use {source, destination} objects (schema autopoetic-portable/v2)"
+        )
+    if not isinstance(raw, dict):
+        raise SystemExit(
+            f"error: {context}: install entry must be a mapping with "
+            "source and destination"
+        )
+    if "source" not in raw or "destination" not in raw:
+        raise SystemExit(
+            f"error: {context}: install entry requires source and destination"
+        )
+    extra = set(raw) - {"source", "destination"}
+    if extra:
+        raise SystemExit(
+            f"error: {context}: unexpected keys in install entry: "
+            f"{', '.join(sorted(extra))}"
+        )
+    return InstallEntry(
+        source=_normalize_rel(str(raw["source"]), field="source"),
+        destination=_normalize_rel(str(raw["destination"]), field="destination"),
+    )
+
+
+def load_manifest(path: Path = MANIFEST_PATH) -> dict[str, Any]:
+    if not path.is_file():
+        raise SystemExit(f"error: portable manifest not found: {path}")
+    with path.open(encoding="utf-8") as fh:
+        data = yaml.safe_load(fh)
+    if not isinstance(data, dict):
+        raise SystemExit(f"error: unsupported or missing schema in {path}")
+    schema = data.get("schema")
+    if schema != SUPPORTED_SCHEMA:
+        raise SystemExit(
+            f"error: unsupported or missing schema in {path} "
+            f"(expected {SUPPORTED_SCHEMA}, got {schema!r})"
+        )
+    return data
+
+
+def resolve_include_key(manifest: dict[str, Any], key: str) -> list[InstallEntry]:
+    """Resolve a profile include key like `core.required` or `cursor.skills`."""
+    parts = key.split(".")
+    node: Any = manifest
+    for part in parts:
+        if not isinstance(node, dict) or part not in node:
+            raise SystemExit(f"error: unknown include key in profile: {key}")
+        node = node[part]
+    if not isinstance(node, list):
+        raise SystemExit(f"error: include key {key} does not resolve to a path list")
+    return [
+        parse_install_entry(item, context=f"{key}[{i}]") for i, item in enumerate(node)
+    ]
+
+
+def resolve_profile_entries(
+    manifest: dict[str, Any],
+    profile_name: str,
+    include_bundles: list[str],
+) -> tuple[list[InstallEntry], dict[str, Any]]:
+    profiles = manifest.get("profiles") or {}
+    if profile_name not in profiles:
+        valid = ", ".join(sorted(profiles)) or "(none)"
+        raise SystemExit(
+            f"error: unknown profile {profile_name!r}; valid profiles: {valid}"
+        )
+    profile = profiles[profile_name]
+    entries: list[InstallEntry] = []
+    for key in profile.get("include") or []:
+        entries.extend(resolve_include_key(manifest, key))
+
+    bundles = manifest.get("optional_bundles") or {}
+    for bid in include_bundles:
+        if bid not in bundles:
+            valid = ", ".join(sorted(bundles)) or "(none)"
+            raise SystemExit(
+                f"error: unknown optional bundle {bid!r}; valid bundles: {valid}"
+            )
+        paths = bundles[bid].get("paths") or []
+        for i, item in enumerate(paths):
+            entries.append(
+                parse_install_entry(item, context=f"optional_bundles.{bid}.paths[{i}]")
+            )
+
+    # Deduplicate by (source, destination) while preserving order
+    seen: set[tuple[str, str]] = set()
+    unique: list[InstallEntry] = []
+    for entry in entries:
+        key = (entry.source, entry.destination)
+        if key not in seen:
+            seen.add(key)
+            unique.append(entry)
+    return unique, profile
+
+
+# Back-compat alias for older call sites / tests that still use the name.
+resolve_profile_paths = resolve_profile_entries
+
+
+def is_excluded(rel: str, excludes: list[str]) -> bool:
+    rel_n = rel.rstrip("/")
+    for ex in excludes:
+        ex_n = ex.rstrip("/")
+        if rel_n == ex_n or rel_n.startswith(ex_n + "/"):
+            return True
+    return False
+
+
+def entry_is_excluded(entry: InstallEntry, excludes: list[str]) -> bool:
+    return is_excluded(entry.source, excludes) or is_excluded(
+        entry.destination, excludes
+    )
+
+
+def validate_sources(package_root: Path, entries: list[InstallEntry]) -> None:
+    missing = [e.source for e in entries if not (package_root / e.source).exists()]
+    if missing:
+        lines = "\n".join(f"  - {p}" for p in missing)
+        raise SystemExit(
+            f"error: manifest lists paths that do not exist under {package_root}:\n{lines}"
+        )
+
+
+def copy_entry(
+    entry: InstallEntry,
+    *,
+    package_root: Path,
+    target: Path,
+    dry_run: bool,
+    excludes: list[str],
+) -> tuple[str, str]:
+    """Copy one install entry. Returns (status, display_label)."""
+    if entry_is_excluded(entry, excludes):
+        return "skipped", entry.destination
+
+    src = package_root / entry.source
+    dst = target / entry.destination
+    def _label(*, directory: bool) -> str:
+        dest = entry.destination.rstrip("/")
+        src_rel = entry.source.rstrip("/")
+        suffix = "/" if directory else ""
+        if src_rel != dest:
+            return f"{dest}{suffix} (from {src_rel})"
+        return f"{dest}{suffix}"
+
+    if src.is_dir():
+        if dry_run:
+            return "created", _label(directory=True)
+        dst.mkdir(parents=True, exist_ok=True)
+        for child in src.rglob("*"):
+            if not child.is_file():
+                continue
+            child_rel_src = str(child.relative_to(package_root)).replace("\\", "/")
+            child_rel_dst = str(
+                (Path(entry.destination) / child.relative_to(src)).as_posix()
+            )
+            if is_excluded(child_rel_src, excludes) or is_excluded(
+                child_rel_dst, excludes
+            ):
+                continue
+            child_dst = dst / child.relative_to(src)
+            child_dst.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(child, child_dst)
+        return "created", _label(directory=True)
+
+    if dry_run:
+        return "created", _label(directory=False)
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(src, dst)
+    return "created", _label(directory=False)
+
+
+def resolve_openspec_tools(
+    requested: str | None,
+    manifest: dict[str, Any],
+    *,
+    claude_symlink: bool,
+) -> str:
+    """Build openspec --tools list.
+
+    When Claude packaging is symlink-to-Cursor, do not ask openspec to create a
+    divergent `.claude/` tree — Claude discovers the Cursor surface via the link.
+    """
+    ospec = manifest.get("openspec") or {}
+    if requested is None:
+        defaults = ospec.get("default_tools") or ["cursor", "claude"]
+        tools = [t.strip() for t in defaults if str(t).strip()]
+    else:
+        tools = [t.strip() for t in requested.split(",") if t.strip()]
+
+    if claude_symlink:
+        tools = [t for t in tools if t != "claude"]
+        if "cursor" not in tools:
+            tools.insert(0, "cursor")
+        if not tools:
+            tools = ["cursor"]
+    return ",".join(tools)
+
+
+def ensure_claude_symlink(target: Path, *, dry_run: bool) -> tuple[str, str]:
+    link = target / ".claude"
+    cursor = target / ".cursor"
+    if link.is_symlink():
+        try:
+            if link.resolve() == cursor.resolve():
+                return "skipped", ".claude -> .cursor (already present)"
+        except OSError:
+            pass
+        return "skipped", ".claude (symlink exists; not overwritten)"
+    if link.exists():
+        # Divergent real directory (e.g. leftover from a prior openspec claude
+        # tool install) — replace with symlink so packaging stays single-source.
+        if dry_run:
+            return "created", ".claude -> .cursor (would replace existing directory)"
+        shutil.rmtree(link)
+        link.symlink_to(".cursor")
+        return "created", ".claude -> .cursor (replaced divergent directory)"
+    if dry_run:
+        return "created", ".claude -> .cursor"
+    link.symlink_to(".cursor")
+    return "created", ".claude -> .cursor"
+
+
+def run_openspec_init(
+    target: Path,
+    manifest: dict[str, Any],
+    *,
+    tools: str | None,
+    openspec_profile: str | None,
+    claude_symlink: bool,
+    dry_run: bool,
+) -> tuple[str, str]:
+    ospec = manifest.get("openspec") or {}
+    if ospec.get("customize_opsx_templates"):
+        raise SystemExit(
+            "error: customize_opsx_templates must be false; "
+            "refusing to install with forked /opsx:* templates"
+        )
+    tool_list = resolve_openspec_tools(
+        tools, manifest, claude_symlink=claude_symlink
+    )
+    profile = openspec_profile or ospec.get("default_profile") or "core"
+
+    cmd = [
+        "openspec",
+        "init",
+        str(target),
+        "--tools",
+        tool_list,
+        "--profile",
+        profile,
+        "--no-animation",
+    ]
+    if dry_run:
+        return "skipped", f"openspec init (dry-run): {' '.join(cmd)}"
+
+    try:
+        result = subprocess.run(cmd, check=False, capture_output=True, text=True)
+    except FileNotFoundError:
+        raise SystemExit(
+            "error: `openspec` CLI not found on PATH; install OpenSpec or use "
+            "--profile lambda-only / core-only"
+        ) from None
+
+    if result.returncode != 0:
+        detail = (result.stderr or result.stdout or "").strip()
+        raise SystemExit(
+            f"error: openspec init failed (exit {result.returncode})\n{detail}"
+        )
+    return "created", f"openspec/ + stock /opsx:* via `{' '.join(cmd)}`"
+
+
+def cmd_init(args: argparse.Namespace) -> int:
+    manifest = load_manifest()
+    target = Path(args.target).resolve()
+    if not target.exists():
+        if args.dry_run:
+            print(f"note: target would be created: {target}")
+        else:
+            target.mkdir(parents=True, exist_ok=True)
+    elif not target.is_dir():
+        raise SystemExit(f"error: target is not a directory: {target}")
+
+    includes = list(args.include or [])
+    entries, profile = resolve_profile_entries(manifest, args.profile, includes)
+    excludes = list(manifest.get("exclude") or [])
+
+    # Drop anything that matches exclude even if listed (fail-safe)
+    filtered = [e for e in entries if not entry_is_excluded(e, excludes)]
+    validate_sources(PACKAGE_ROOT, filtered)
+
+    created: list[str] = []
+    skipped: list[str] = []
+
+    print(f"autopoetic init → {target}")
+    print(f"  profile: {args.profile}")
+    if includes:
+        print(f"  bundles: {', '.join(includes)}")
+    if args.dry_run:
+        print("  mode: dry-run (no files written)")
+    print()
+
+    for entry in filtered:
+        status, label = copy_entry(
+            entry,
+            package_root=PACKAGE_ROOT,
+            target=target,
+            dry_run=args.dry_run,
+            excludes=excludes,
+        )
+        if status == "created":
+            created.append(label)
+        else:
+            skipped.append(label)
+
+    if profile.get("openspec"):
+        status, label = run_openspec_init(
+            target,
+            manifest,
+            tools=args.tools,
+            openspec_profile=args.openspec_profile,
+            claude_symlink=bool(profile.get("claude_symlink")),
+            dry_run=args.dry_run,
+        )
+        (created if status == "created" else skipped).append(label)
+
+    if profile.get("claude_symlink"):
+        status, label = ensure_claude_symlink(target, dry_run=args.dry_run)
+        (created if status == "created" else skipped).append(label)
+
+    print("Created:")
+    if created:
+        for item in created:
+            print(f"  + {item}")
+    else:
+        print("  (none)")
+    print("Skipped:")
+    if skipped:
+        for item in skipped:
+            print(f"  · {item}")
+    else:
+        print("  (none)")
+    print()
+    print(
+        "Done. /opsx:* stays stock OpenSpec; Λ binds via adapters + "
+        "lambda-engine/OPENSPEC-BINDING.md."
+    )
+    return 0
+
+
+def default_prefix() -> Path:
+    return DEFAULT_PREFIX.expanduser().resolve()
+
+
+def install_paths(prefix: Path) -> tuple[Path, Path, Path]:
+    """Return (bin_dir, share_dir, launcher_path)."""
+    bin_dir = prefix / "bin"
+    share_dir = prefix / "share" / SHARE_DIRNAME
+    return bin_dir, share_dir, bin_dir / "autopoetic"
+
+
+def collect_machine_install_sources(manifest: dict[str, Any]) -> list[str]:
+    """Union of manifest source paths needed for a self-contained CLI install."""
+    sources: list[str] = ["config.yaml", "bin/autopoetic"]
+    profiles = manifest.get("profiles") or {}
+    for profile in profiles.values():
+        for key in profile.get("include") or []:
+            for entry in resolve_include_key(manifest, key):
+                sources.append(entry.source)
+    bundles = manifest.get("optional_bundles") or {}
+    for bid, bundle in bundles.items():
+        for i, item in enumerate(bundle.get("paths") or []):
+            entry = parse_install_entry(
+                item, context=f"optional_bundles.{bid}.paths[{i}]"
+            )
+            sources.append(entry.source)
+    # Deduplicate while preserving order
+    seen: set[str] = set()
+    unique: list[str] = []
+    for src in sources:
+        if src not in seen:
+            seen.add(src)
+            unique.append(src)
+    return unique
+
+
+def copy_tree_or_file(src: Path, dst: Path) -> None:
+    if src.is_dir():
+        if dst.exists():
+            shutil.rmtree(dst)
+        shutil.copytree(src, dst)
+    else:
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(src, dst)
+
+
+def write_link_launcher(launcher: Path, package_root: Path) -> None:
+    """Write a small wrapper so a missing checkout yields a clear error."""
+    if launcher.is_symlink() or launcher.exists():
+        launcher.unlink()
+    root_lit = json.dumps(str(package_root))
+    launcher.write_text(
+        "#!/usr/bin/env python3\n"
+        "import os\n"
+        "import sys\n"
+        "from pathlib import Path\n"
+        f"PACKAGE_ROOT = Path({root_lit})\n"
+        'CLI = PACKAGE_ROOT / "bin" / "autopoetic"\n'
+        "if not CLI.is_file():\n"
+        "    print(\n"
+        '        f"error: package root missing: {PACKAGE_ROOT}",\n'
+        "        file=sys.stderr,\n"
+        "    )\n"
+        "    print(\n"
+        '        "  Reinstall from an autopoetic-agent checkout:\\n"\n'
+        '        "    ./bin/autopoetic install\\n"\n'
+        '        "  or restore the checkout and re-run:\\n"\n'
+        '        "    ./bin/autopoetic install --link",\n'
+        "        file=sys.stderr,\n"
+        "    )\n"
+        "    sys.exit(1)\n"
+        "os.execv(sys.executable, [sys.executable, str(CLI), *sys.argv[1:]])\n",
+        encoding="utf-8",
+    )
+    launcher.chmod(launcher.stat().st_mode | 0o111)
+
+
+def write_copy_launcher(launcher: Path, installed_cli: Path) -> None:
+    """Symlink launcher to the self-contained CLI under share/."""
+    if launcher.is_symlink() or launcher.exists():
+        launcher.unlink()
+    launcher.symlink_to(installed_cli)
+
+
+def path_on_path(bin_dir: Path) -> bool:
+    path_env = os.environ.get("PATH", "")
+    parts = [Path(p).expanduser() for p in path_env.split(os.pathsep) if p]
+    try:
+        resolved = bin_dir.resolve()
+    except OSError:
+        resolved = bin_dir
+    for part in parts:
+        try:
+            if part.resolve() == resolved:
+                return True
+        except OSError:
+            if part == bin_dir or part == resolved:
+                return True
+    return False
+
+
+def write_install_meta(
+    share_dir: Path,
+    *,
+    mode: str,
+    prefix: Path,
+    package_root: Path,
+    launcher: Path,
+) -> None:
+    meta = {
+        "mode": mode,
+        "prefix": str(prefix),
+        "package_root": str(package_root),
+        "launcher": str(launcher),
+        "share": str(share_dir),
+    }
+    share_dir.mkdir(parents=True, exist_ok=True)
+    (share_dir / INSTALL_META_NAME).write_text(
+        json.dumps(meta, indent=2) + "\n", encoding="utf-8"
+    )
+
+
+def read_install_meta(share_dir: Path) -> dict[str, Any] | None:
+    path = share_dir / INSTALL_META_NAME
+    if not path.is_file():
+        return None
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    return data if isinstance(data, dict) else None
+
+
+def cmd_install(args: argparse.Namespace) -> int:
+    prefix = Path(args.prefix).expanduser().resolve() if args.prefix else default_prefix()
+    bin_dir, share_dir, launcher = install_paths(prefix)
+    package_root = PACKAGE_ROOT
+    mode = "link" if args.link else "copy"
+
+    print(f"autopoetic install → prefix {prefix}")
+    print(f"  mode: {mode}")
+    print()
+
+    bin_dir.mkdir(parents=True, exist_ok=True)
+
+    if mode == "link":
+        # Keep a share dir for metadata / uninstall bookkeeping only.
+        if share_dir.exists():
+            # Replace a previous self-contained tree when switching to --link.
+            for child in share_dir.iterdir():
+                if child.name == INSTALL_META_NAME:
+                    continue
+                if child.is_dir() and not child.is_symlink():
+                    shutil.rmtree(child)
+                else:
+                    child.unlink()
+        write_link_launcher(launcher, package_root)
+        write_install_meta(
+            share_dir,
+            mode=mode,
+            prefix=prefix,
+            package_root=package_root,
+            launcher=launcher,
+        )
+    else:
+        manifest = load_manifest()
+        sources = collect_machine_install_sources(manifest)
+        excludes = list(manifest.get("exclude") or [])
+        # Fail-safe: never copy excluded trees into the machine install.
+        sources = [s for s in sources if not is_excluded(s, excludes)]
+        missing = [s for s in sources if not (package_root / s).exists()]
+        if missing:
+            lines = "\n".join(f"  - {p}" for p in missing)
+            raise SystemExit(
+                f"error: cannot build self-contained install; missing sources:\n{lines}"
+            )
+
+        if share_dir.exists():
+            shutil.rmtree(share_dir)
+        share_dir.mkdir(parents=True, exist_ok=True)
+
+        for rel in sources:
+            src = package_root / rel
+            dst = share_dir / rel
+            copy_tree_or_file(src, dst)
+
+        installed_cli = share_dir / "bin" / "autopoetic"
+        installed_cli.chmod(installed_cli.stat().st_mode | 0o111)
+        write_copy_launcher(launcher, installed_cli)
+        write_install_meta(
+            share_dir,
+            mode=mode,
+            prefix=prefix,
+            package_root=share_dir,
+            launcher=launcher,
+        )
+
+    print(f"Launcher: {launcher}")
+    if mode == "copy":
+        print(f"Package:  {share_dir}")
+    else:
+        print(f"Linked:   {package_root}")
+        print(f"Meta:     {share_dir / INSTALL_META_NAME}")
+
+    if not path_on_path(bin_dir):
+        print()
+        print(
+            f"warning: {bin_dir} is not on PATH.\n"
+            f'  Add it with: export PATH="{bin_dir}:$PATH"'
+        )
+    print()
+    print("Done. Run `autopoetic init <target>` from any directory.")
+    return 0
+
+
+def cmd_uninstall(args: argparse.Namespace) -> int:
+    prefix = Path(args.prefix).expanduser().resolve() if args.prefix else default_prefix()
+    bin_dir, share_dir, launcher = install_paths(prefix)
+    meta = read_install_meta(share_dir)
+
+    print(f"autopoetic uninstall → prefix {prefix}")
+    removed: list[str] = []
+
+    if launcher.exists() or launcher.is_symlink():
+        launcher.unlink()
+        removed.append(str(launcher))
+
+    if share_dir.exists():
+        shutil.rmtree(share_dir)
+        removed.append(str(share_dir))
+    elif meta is None and not removed:
+        print("  (nothing installed at this prefix)")
+        return 0
+
+    print("Removed:")
+    for item in removed:
+        print(f"  - {item}")
+    print()
+    print("Done. Project targets were not modified.")
+    return 0
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        prog="autopoetic",
+        description="Autopoetic portable installer (manifest-driven).",
+    )
+    sub = parser.add_subparsers(dest="command", required=True)
+
+    init_p = sub.add_parser(
+        "init",
+        help="Install the portable Λ surface into a target project",
+    )
+    init_p.add_argument(
+        "target",
+        nargs="?",
+        default=".",
+        help="Target project directory (default: current directory)",
+    )
+    init_p.add_argument(
+        "--profile",
+        default="full",
+        help="Install profile from config.yaml (default: full)",
+    )
+    init_p.add_argument(
+        "--include",
+        action="append",
+        default=[],
+        metavar="BUNDLE",
+        help="Optional bundle id from config.yaml (repeatable)",
+    )
+    init_p.add_argument(
+        "--tools",
+        default=None,
+        help="Pass-through tools list for openspec init (comma-separated)",
+    )
+    init_p.add_argument(
+        "--openspec-profile",
+        default=None,
+        help="Pass-through --profile for openspec init (default from manifest)",
+    )
+    init_p.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Resolve and print actions without writing files",
+    )
+    init_p.set_defaults(func=cmd_init)
+
+    install_p = sub.add_parser(
+        "install",
+        help="Install the autopoetic CLI onto this machine (PATH)",
+    )
+    install_p.add_argument(
+        "--prefix",
+        default=None,
+        help=f"Install prefix (default: {DEFAULT_PREFIX})",
+    )
+    install_p.add_argument(
+        "--link",
+        action="store_true",
+        help="Link to this checkout instead of copying a self-contained tree",
+    )
+    install_p.set_defaults(func=cmd_install)
+
+    uninstall_p = sub.add_parser(
+        "uninstall",
+        help="Remove a machine-installed autopoetic CLI from a prefix",
+    )
+    uninstall_p.add_argument(
+        "--prefix",
+        default=None,
+        help=f"Install prefix (default: {DEFAULT_PREFIX})",
+    )
+    uninstall_p.set_defaults(func=cmd_uninstall)
+    return parser
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = build_parser()
+    args = parser.parse_args(argv)
+    return args.func(args)
+
+
+if __name__ == "__main__":
+    sys.exit(main())

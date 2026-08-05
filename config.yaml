@@ -1,0 +1,158 @@
+# Autopoetic Agent — portable install manifest
+#
+# Controls which files `autopoetic init` (or equivalent) copies into a target
+# project alongside `openspec init`. Edit this file to grow/shrink the portable
+# set; do not hardcode path lists in the installer.
+#
+# Schema autopoetic-portable/v2: every installable path is an object with
+# `source` (package-relative) and `destination` (target-relative). Distributable
+# Cursor instruction assets live under src/{skills,commands,rules,agents} and
+# install to .cursor/... . Repository discovery uses .cursor/<cat> → ../src/<cat>.
+
+schema: autopoetic-portable/v2
+
+# How OpenSpec is installed into the target (stock CLI; do not fork /opsx:* bodies)
+openspec:
+  # Delegate to the installed openspec CLI
+  invoke: openspec init
+  # Pass-through defaults; CLI --tools / --profile may override at runtime.
+  # When claude_symlink is true, init drops `claude` from openspec --tools so
+  # OpenSpec does not create a divergent .claude/ tree (Claude uses the symlink).
+  default_tools: [cursor, claude]
+  default_profile: core
+  # Never rewrite generated OpenSpec skills/commands to embed Λ tables
+  customize_opsx_templates: false
+
+# Always-on adapters + normative core (required for any install)
+core:
+  required:
+    - source: lambda-engine/CORE.md
+      destination: lambda-engine/CORE.md
+    - source: lambda-engine/OPENSPEC-BINDING.md
+      destination: lambda-engine/OPENSPEC-BINDING.md
+    - source: AGENTS.md
+      destination: AGENTS.md
+    - source: CLAUDE.md
+      destination: CLAUDE.md
+  optional:
+    - source: .windsurfrules
+      destination: .windsurfrules
+    - source: README.md
+      destination: README.md
+
+# Cursor instruction tree (Claude discovers via .claude → .cursor symlink)
+cursor:
+  # Create `.claude` → `.cursor` after copy (do not duplicate the tree)
+  claude_symlink: .cursor
+
+  rules:
+    - source: src/rules/general/lambda-engine-operational.mdc
+      destination: .cursor/rules/general/lambda-engine-operational.mdc
+
+  commands:
+    # Explicit thin wrappers (four Mode/Λ + /debug orchestration)
+    - source: src/commands/detect-state.md
+      destination: .cursor/commands/detect-state.md
+    - source: src/commands/halira.md
+      destination: .cursor/commands/halira.md
+    - source: src/commands/mode.md
+      destination: .cursor/commands/mode.md
+    - source: src/commands/operator-sequence.md
+      destination: .cursor/commands/operator-sequence.md
+    - source: src/commands/debug.md
+      destination: .cursor/commands/debug.md
+
+  skills:
+    - source: src/skills/README.md
+      destination: .cursor/skills/README.md
+    - source: src/skills/adversarial-collaboration/
+      destination: .cursor/skills/adversarial-collaboration/
+    - source: src/skills/forward-operators/
+      destination: .cursor/skills/forward-operators/
+    - source: src/skills/halira/
+      destination: .cursor/skills/halira/
+    - source: src/skills/lambda-engine-formula/
+      destination: .cursor/skills/lambda-engine-formula/
+    - source: src/skills/lambda-engine-operational/
+      destination: .cursor/skills/lambda-engine-operational/
+    - source: src/skills/mode-operator-selection/
+      destination: .cursor/skills/mode-operator-selection/
+    - source: src/skills/motive-grouped-commit/
+      destination: .cursor/skills/motive-grouped-commit/
+    - source: src/skills/operator-tools/
+      destination: .cursor/skills/operator-tools/
+    - source: src/skills/operators-reference/
+      destination: .cursor/skills/operators-reference/
+    - source: src/skills/retro-operators/
+      destination: .cursor/skills/retro-operators/
+    - source: src/skills/state-detection/
+      destination: .cursor/skills/state-detection/
+
+  agents:
+    # Cognitive-control roster (fixed three) + code-explorer (required by /debug).
+    - source: src/agents/halira-investigator.md
+      destination: .cursor/agents/halira-investigator.md
+    - source: src/agents/mode1-navigator.md
+      destination: .cursor/agents/mode1-navigator.md
+    - source: src/agents/adversarial-reviewer.md
+      destination: .cursor/agents/adversarial-reviewer.md
+    - source: src/agents/code-explorer.md
+      destination: .cursor/agents/code-explorer.md
+
+# Opt-in extras (off by default; enable via `autopoetic init --include <id>`)
+optional_bundles:
+  tuts:
+    description: Local command tutorial notes
+    paths:
+      - source: .cursor/tuts/
+        destination: .cursor/tuts/
+  hooks:
+    description: Cursor hooks + scripts (project-specific; usually skip on foreign repos)
+    paths:
+      - source: .cursor/hooks.json
+        destination: .cursor/hooks.json
+      - source: .cursor/hooks/
+        destination: .cursor/hooks/
+
+# Explicit excludes — never copy even if a glob would match
+# Match either package source or consumer destination paths.
+exclude:
+  - .cursor/worktrees.json
+  - .cursor/.lambda-mode
+  - .cursor/.timestamp-reference
+  - .cursor/mcp.json.example
+  - wiki/
+  - evals/
+  - docs/
+  - .git/
+
+# Install profiles (named subsets of the manifest)
+profiles:
+  # Full portable Λ + OpenSpec binding (default)
+  full:
+    include:
+      - core.required
+      - cursor.rules
+      - cursor.commands
+      - cursor.skills
+      - cursor.agents
+    openspec: true
+    claude_symlink: true
+
+  # Λ cognitive surface only (no openspec init)
+  lambda-only:
+    include:
+      - core.required
+      - cursor.rules
+      - cursor.commands
+      - cursor.skills
+      - cursor.agents
+    openspec: false
+    claude_symlink: true
+
+  # Minimal always-on + CORE (no skills/agents/commands tree)
+  core-only:
+    include:
+      - core.required
+    openspec: false
+    claude_symlink: false

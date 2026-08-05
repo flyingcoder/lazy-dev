@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "autopoetic"
+version = "0.1.0"
+description = "Autopoetic portable Λ-Engine installer (manifest-driven CLI)"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+  "PyYAML>=6.0",
+]
+
+[project.scripts]
+autopoetic = "autopoetic_cli:main"
+
+[tool.setuptools]
+py-modules = ["autopoetic_cli"]
+
+[tool.setuptools.package-data]
+"*" = ["bin/autopoetic", "config.yaml"]
