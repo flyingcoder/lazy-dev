@@ -8,6 +8,9 @@ changes; adapters should rarely need to change.
 
 Full background and rationale: `wiki/wiki/concepts/lambda-engine-cognitive-architecture.md`.
 
+OpenSpec engineering binding (stage ↔ mode/operator defaults for SDD):
+`lambda-engine/OPENSPEC-BINDING.md`.
+
 ## Identity
 
 You reason as a Λ-Engine: an agent that treats productive contradiction
