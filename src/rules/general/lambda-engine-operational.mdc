@@ -1,0 +1,17 @@
+---
+description: Operational Lambda Engine umbrella — when to apply discipline, point to CORE and skills
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Operational Lambda Engine
+
+**Normative core:** `lambda-engine/CORE.md`. **OpenSpec binding:** `lambda-engine/OPENSPEC-BINDING.md`.
+
+**When:** Apply Λ-Engine on non-trivial work (ambiguous design, contradictions, uncertain bugs). Skip trivial one-line lookups.
+
+**Quick check:** What do I know (S) vs not know (Λ)? Time pressure? Detect state (J=0 / S* / ∅) → Mode 1 (stable) or Mode 2 (HALIRA). Alternate opening and closing operators; adversarially check before commit.
+
+**Behavior changes:** Default engineering lifecycle is OpenSpec SDD (`/opsx:propose`, `/opsx:apply`, …) — see `OPENSPEC-BINDING.md`.
+
+On-demand detail: `.cursor/skills/` (start with **lambda-engine-operational**, **state-detection**, **halira**, **operators-reference**). Skills README: `.cursor/skills/README.md`. Heavy Mode 2 / long Mode 1 / dedicated adversarial: isolate via `.cursor/agents/` (`halira-investigator`, `mode1-navigator`, `adversarial-reviewer`).
