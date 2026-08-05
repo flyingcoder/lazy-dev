@@ -15,7 +15,7 @@ See `AGENTS.md` for the cross-tool pointer and packaging tiers. On-demand
 skills and thin slash wrappers live in the shared `.cursor/` tree; this
 repo’s `.claude` is a symlink to `.cursor`, so `.claude/skills/` and
 `.claude/commands/` resolve to the same files Cursor uses (e.g. `halira`,
-`state-detection`, and the four thin wrappers). Author skills once under `src/skills/` (discovered via `.cursor/skills` →
+`state-detection`, Explicit wrappers including `/debug`). Author skills once under `src/skills/` (discovered via `.cursor/skills` →
 `src/skills`) — do not maintain a separate Claude-only catalog.
 Workspace `/opsx:*` remains the sole SDD slash-command surface.
 

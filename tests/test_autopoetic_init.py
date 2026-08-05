@@ -334,8 +334,6 @@ def test_cli_smoke_src_not_in_destination(pkg: Path, tmp_path: Path, monkeypatch
             str(target),
             "--profile",
             "lambda-only",
-            "--include",
-            "code-explorer",
         ],
         cwd=str(PACKAGE_ROOT),
         capture_output=True,
@@ -344,6 +342,7 @@ def test_cli_smoke_src_not_in_destination(pkg: Path, tmp_path: Path, monkeypatch
     )
     assert result.returncode == 0, result.stderr + result.stdout
     assert (target / ".cursor" / "skills" / "halira" / "SKILL.md").is_file()
+    assert (target / ".cursor" / "commands" / "debug.md").is_file()
     assert (target / ".cursor" / "agents" / "code-explorer.md").is_file()
     assert (target / ".claude").is_symlink()
     assert not (target / "src").exists()

@@ -113,9 +113,10 @@ def test_checkout_init_without_machine_install(tmp_path: Path):
     """Existing ./bin/autopoetic init path still works with no machine install."""
     target = tmp_path / "cli-target"
     result = run_cli(
-        ["init", str(target), "--profile", "lambda-only", "--include", "code-explorer"]
+        ["init", str(target), "--profile", "lambda-only"]
     )
     assert result.returncode == 0, result.stderr + result.stdout
     assert (target / ".cursor" / "skills" / "halira" / "SKILL.md").is_file()
+    assert (target / ".cursor" / "commands" / "debug.md").is_file()
     assert (target / ".cursor" / "agents" / "code-explorer.md").is_file()
     assert (target / ".claude").is_symlink()
