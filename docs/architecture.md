@@ -118,9 +118,9 @@ The system navigates between three states:
 
 ### Common Sequences for Mode 2
 
-- **Complete HALIRA**: `Seed ∘ Axis ∘ Meta ∘ Weave ∘ Non ∘ Para ∘ Ortho ∘ Bind` (λ_eff ≈ 0.52)
+- **Complete HALIRA**: `Seed ∘ Axis ∘ Meta ∘ Weave ∘ Para/Retro ∘ Ortho ∘ Bind` (Step 5 substitutes for `Non` after Step 3 Meta; insert `Para` after `Ortho` only if a paradigm shift is needed)
 - **Paradigm Shift**: `Para ∘ Ana ∘ Seed` (λ_eff ≈ 0.56)
-- **Anomaly Detection**: `Meta ∘ Non` (λ_eff ≈ 0.85) ⚠️ Never `Non` after `Meta`
+- **Anomaly Detection**: never use `Meta ∘ Non`; integrate first (`Meta ∘ Weave ∘ Non`) or substitute `Para`/`Retro`
 
 ## Verifying the Architecture
 

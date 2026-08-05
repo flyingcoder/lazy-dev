@@ -17,7 +17,7 @@ OpenSpec) instead.
 |------|---------|-------------|
 | Always-on | `AGENTS.md`, `CLAUDE.md`, one umbrella operational rule | Every turn (keep tiny) |
 | On-demand | Skills in this directory | Description / task trigger |
-| Explicit | Workspace `/opsx:*`; skills; Cursor `/halira`, `/detect-state`, `/mode`, `/operator-sequence`; cognitive-control sub-agents (`.cursor/agents/`) | User or agent invokes / isolates |
+| Explicit | Workspace `/opsx:*`; skills; Cursor `/halira`, `/detect-state`, `/mode`, `/operator-sequence`, `/debug`; cognitive-control sub-agents (`.cursor/agents/`) | User or agent invokes / isolates |
 
 **Normative semantics:** `lambda-engine/CORE.md`
 
@@ -80,7 +80,7 @@ skill set. Prefer not committing one-off scratch scripts (`test-*.sh`,
   skill/CORE pointers; Mode 2 uses this **halira** skill inside
   `halira-investigator` (Explicit `/halira` spawns that agent).
 - **Claude packaging:** `.claude` → `.cursor` so Claude Code loads this same
-  skill tree (and the four thin wrappers / agents). Do not maintain a
+  skill tree (and Explicit wrappers / agents). Do not maintain a
   divergent undotted `claude/` catalog.
 
 ## Loading skills in Cursor

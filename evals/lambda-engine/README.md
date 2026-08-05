@@ -1,8 +1,10 @@
 # Lambda Engine DeepEval Suite
 
 Evaluates whether agent transcripts comply with the Lambda Engine cognitive
-architecture (see `~/wiki/topics/lambda-engine/wiki/concepts/lambda-engine-cognitive-architecture.md`
-for the full write-up). Four test categories, three of them fully offline:
+architecture. Normative source: [`lambda-engine/CORE.md`](../../lambda-engine/CORE.md)
+(output convention: `State:` / `Mode:` / `Operator sequence:` / `Dissipation:`).
+Narrative write-up: `wiki/wiki/concepts/lambda-engine-cognitive-architecture.md`.
+Four test categories, three of them fully offline:
 
 | Test file | Metric | Live LLM call? |
 |---|---|---|

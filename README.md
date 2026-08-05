@@ -9,8 +9,18 @@ matched next move — stabilize, escalate, or attack — so contradictions becom
 fuel for a better answer instead of stalls.
 
 The portable core works with **Codex, Claude Code, Cursor, Windsurf, and any
-other AI agent**; Cursor additionally ships a native, fully-featured
-implementation with 50+ commands and 60+ rules.
+other AI agent**. Cursor ships on-demand skills plus thin Explicit-tier
+command wrappers; always-on Lambda surface is a **single** umbrella stub under
+the discoverable [`.cursor/`](.cursor/) tree. Default engineering lifecycle for
+behavior changes: **OpenSpec SDD** — see
+[`lambda-engine/OPENSPEC-BINDING.md`](lambda-engine/OPENSPEC-BINDING.md).
+
+**Provenance:** theoretical Controlled Rupture / Λ-Engine materials live in the
+workspace [`recursive-ai-framework`](../recursive-ai-framework/) corpus.
+**Runtime norm** for this project remains
+[`lambda-engine/CORE.md`](lambda-engine/CORE.md) plus skills under
+[`src/skills/`](src/skills/) (discovered via `.cursor/skills` → `src/skills`) —
+do not rewrite the theoretical corpus to change agent behavior.
 
 ## Visual Preview
 
@@ -23,14 +33,23 @@ implementation with 50+ commands and 60+ rules.
                 │               │               │
         ┌───────▼──────┐ ┌──────▼──────┐ ┌──────▼───────┐
         │  AGENTS.md   │ │ CLAUDE.md   │ │.windsurfrules│
-        │  (Codex, and │ │ + .claude/  │ │  (Windsurf)  │
-        │  most agents)│ │ skills+cmds │ │              │
-        └──────────────┘ └─────────────┘ └──────────────┘
-                │
+        │  (Codex, and │ │ (Claude     │ │  (Windsurf)  │
+        │  most agents)│ │  adapter)   │ │              │
+        └──────────────┘ └──────┬──────┘ └──────────────┘
+                │               │
+                │               │  .claude → .cursor
+                │               ▼
         ┌───────▼─────────────────────┐
-        │  .cursor/  (native, predates │
-        │  the portable spec: 50+     │
-        │  commands, 60+ rules)       │
+        │  .cursor/  (discovery tree: │
+        │  skills/cmds/rules/agents   │
+        │  → ../src/<cat>; Claude via │
+        │  .claude → .cursor)         │
+        └──────────────┬───────────────┘
+                       │
+        ┌──────────────▼───────────────┐
+        │  src/{skills,commands,rules, │
+        │  agents}  (canonical package │
+        │  sources for autopoetic init)│
         └──────────────────────────────┘
 ```
 
@@ -49,14 +68,25 @@ implementation with 50+ commands and 60+ rules.
 | Tool | Entry point | Notes |
 |---|---|---|
 | Codex (and most other agents) | [`AGENTS.md`](AGENTS.md) | Universal fallback convention |
-| Claude Code | [`CLAUDE.md`](CLAUDE.md) | Auto-imports `lambda-engine/CORE.md`; also ships skills/commands in [`.claude/`](.claude/) |
+| Claude Code | [`CLAUDE.md`](CLAUDE.md) | Auto-imports `lambda-engine/CORE.md`; skills/commands via [`.claude`](.claude/) → [`.cursor/`](.cursor/) |
 | Windsurf | [`.windsurfrules`](.windsurfrules) | Read by Cascade at repo root |
-| Cursor | [`.cursor/rules/`](.cursor/rules/) | Native implementation, predates the portable spec — see [`docs/cursor-native-guide.md`](docs/cursor-native-guide.md) |
+| Cursor | [`.cursor/rules/`](.cursor/rules/) + [`.cursor/skills/`](.cursor/skills/) | Discovery via `.cursor/` (symlinked to [`src/`](src/)); **one** always-on umbrella stub + on-demand skills; see [`docs/cursor-native-guide.md`](docs/cursor-native-guide.md) |
 
 All adapters point to **[`lambda-engine/CORE.md`](lambda-engine/CORE.md)**,
 the single source of truth for the architecture. Edit `CORE.md` when the
 architecture changes — the adapters are thin pointers and shouldn't need to
-change with it.
+change with it. Non-Λ always-on process rules (docs/git/memory/meta hygiene)
+were retired; use OpenSpec SDD + skills instead. Prefer not committing
+one-off scratch scripts (`test-*.sh`, `tmp/`, `scratch/`). Cognitive-control
+sub-agents ship under [`.cursor/agents/`](.cursor/agents/); Mode 2 also uses
+the `halira` skill + CORE.
+
+### Future: delivery-pipeline cognitive control
+
+Near-term control plane is Λ-Engine + OpenSpec SDD
+([`OPENSPEC-BINDING.md`](lambda-engine/OPENSPEC-BINDING.md)). A later
+project-engineering delivery pipeline may reuse the same CORE and adapters;
+that pipeline is **not** implemented in this repo yet.
 
 ## Prerequisites
 
@@ -66,30 +96,98 @@ change with it.
 
 ## Installation
 
-Clone the repo to use it as-is:
+There are two distinct steps:
+
+1. **Machine install** — put the `autopoetic` CLI on your PATH.
+2. **Project init** — copy the portable Λ surface into a target repo (`autopoetic init`).
+
+### 1. Machine install (CLI on PATH)
+
+Clone the repo, then install the CLI (preferred):
 
 ```bash
 git clone https://github.com/flyingcoder/autopoetic-agent.git
 cd autopoetic-agent
+./bin/autopoetic install
 ```
 
-To adopt the architecture inside an **existing** project instead, copy the
-core spec plus whichever adapter(s) match your tooling:
+Defaults:
+
+- Prefix: `~/.local` → launcher at `~/.local/bin/autopoetic`, package data at `~/.local/share/autopoetic/`
+- Self-contained copy (survives moving/deleting the checkout)
+
+Options:
 
 ```bash
-# Required: the portable core spec
-cp -r lambda-engine <target-repo>/
-
-# Pick the adapter(s) for your tool(s)
-cp AGENTS.md <target-repo>/          # Codex / generic agents
-cp CLAUDE.md <target-repo>/          # Claude Code
-cp -r .claude <target-repo>/         # Claude Code skills + slash commands
-cp .windsurfrules <target-repo>/     # Windsurf
-cp -r .cursor <target-repo>/         # Cursor-native implementation (optional, large)
+./bin/autopoetic install --prefix /opt/autopoetic   # custom prefix (bin + share under it)
+./bin/autopoetic install --link                    # link to this checkout (dev / editable)
+./bin/autopoetic uninstall                         # remove launcher + share from the prefix
+./bin/autopoetic uninstall --prefix /opt/autopoetic
 ```
 
-Then update the relative paths inside the copied adapter files if
-`lambda-engine/` doesn't land at your target repo's root.
+If the install prints a PATH warning, add the bin dir:
+
+```bash
+export PATH="$HOME/.local/bin:$PATH"
+```
+
+Optional Python packaging escape hatch (from the checkout): `pip install -e .` — still prefer `./bin/autopoetic install` for a self-contained machine copy of the portable assets.
+
+### 2. Project init (adopt into a target repo)
+
+The portable set is defined by [`config.yaml`](config.yaml) (schema
+`autopoetic-portable/v2`). Distributable skills, commands, rules, and agents
+live under [`src/`](src/) and install to `.cursor/` in the target. Use the
+installer — do not hardcode path lists outside that manifest:
+
+```bash
+# After machine install (from any directory):
+autopoetic init /path/to/target-repo                  # profile: full (default)
+autopoetic init /path/to/target-repo --profile lambda-only
+autopoetic init /path/to/target-repo --profile core-only
+autopoetic init /path/to/target-repo --include tuts
+
+# Or from a checkout without machine install:
+./bin/autopoetic init /path/to/target-repo
+```
+
+- **`full`** — Λ adapters, Explicit wrappers (including `/debug`), skills,
+  cognitive-control agents + `code-explorer`, then stock `openspec init`
+  (Cursor tools; Claude discovers the same tree via `.claude` → `.cursor`),
+  plus the symlink itself.
+- **`lambda-only`** — same Λ surface, no OpenSpec init.
+- **`core-only`** — `lambda-engine/` + thin adapters only (no skills/commands/agents).
+
+`/opsx:*` commands stay **stock OpenSpec** — this installer never rewrites them.
+Λ binds via the copied adapters, skills, agents, and
+[`lambda-engine/OPENSPEC-BINDING.md`](lambda-engine/OPENSPEC-BINDING.md).
+
+Optional bundles (`tuts`, `hooks`) stay off unless you pass `--include`.
+`code-explorer` ships in the default agent set (required by `/debug`). Wiki,
+evals, and worktrees metadata are hard-excluded.
+
+### Manual `cp` fallback
+
+If you cannot run the CLI, copy each `source` → `destination` pair listed in
+`config.yaml` yourself (keep the set in sync with that file):
+
+```bash
+# Required core (see config.yaml → core.required)
+cp -r lambda-engine <target-repo>/
+cp AGENTS.md CLAUDE.md <target-repo>/
+
+# Instruction assets: copy from src/ to the .cursor/ destinations in config.yaml
+# (do not copy src/ into the consumer; Cursor discovers .cursor/ only)
+mkdir -p <target-repo>/.cursor/{rules/general,commands,skills,agents}
+# …then copy each listed source → destination from config.yaml…
+
+ln -s .cursor <target-repo>/.claude   # do not install a second Claude tree
+```
+
+Then update relative paths inside adapters if `lambda-engine/` is not at the
+target root. On Windows or checkouts that flatten symlinks, recreate
+`.claude` → `.cursor` and the `.cursor/{skills,commands,rules,agents}` →
+`../src/<cat>` links after clone (this package's discovery layout).
 
 To run the DeepEval suite that verifies the architecture's hard constraints:
 
@@ -114,23 +212,25 @@ ambiguous requirements. It:
 **In Cursor**, type `/` in chat to drive this explicitly:
 
 ```bash
-/goal define: Build user authentication system
-/plan create: Implement authentication feature
-/spec feature: User authentication with JWT tokens
-/implement feature: User authentication with JWT
-/commit
+/detect-state Need both performance and simplicity
+/mode Need both consistency and scalability
+/operator-sequence Seed → Weave → Ortho
+/halira Foundational contradiction that survived Mode 1
+/debug Login fails with 500 after password reset
 ```
 
-**In Claude Code**, the equivalent slash commands live in
-[`.claude/commands/`](.claude/commands/) (backed by skills in
-[`.claude/skills/`](.claude/skills/)):
+For behavior changes, use workspace OpenSpec `/opsx:*` commands. Normal git
+replaces the retired project-local git/docs commands.
+
+**In Claude Code**, the same Explicit wrappers are available through the
+shared `.claude` → `.cursor` tree (skills load on trigger):
 
 ```bash
-/detect-state analyze: Need both performance and simplicity but they conflict
-/halira contradiction: Need both consistency and scalability but they conflict
-/attack design: Event sourcing + CQRS architecture
-/retro active src/legacy/auth.ts
-/lambda-commit
+/detect-state Need both performance and simplicity
+/mode Need both consistency and scalability
+/operator-sequence Seed → Weave → Ortho
+/halira Foundational contradiction that survived Mode 1
+/debug Login fails with 500 after password reset
 ```
 
 **In Codex, Windsurf, or any other agent**, no slash commands are needed —
@@ -140,7 +240,7 @@ applies automatically once the agent reads its instructions file.
 ## Documentation
 
 - [`docs/architecture.md`](docs/architecture.md) — the cognitive model: the productive-contradiction principle, phase-space states, the operator vocabulary, and dissipation tracking
-- [`docs/cursor-native-guide.md`](docs/cursor-native-guide.md) — full Cursor-native command reference, rule catalogue, workflows, and examples
+- [`docs/cursor-native-guide.md`](docs/cursor-native-guide.md) — skills-first Cursor packaging and Explicit wrapper reference
 - [`lambda-engine/CORE.md`](lambda-engine/CORE.md) — the canonical, machine-facing spec that every adapter points to
 - [`wiki/wiki/concepts/lambda-engine-cognitive-architecture.md`](wiki/wiki/concepts/lambda-engine-cognitive-architecture.md) — full narrative write-up and rationale
 - [`evals/lambda-engine/`](evals/lambda-engine/) — DeepEval suite scoring transcripts against the architecture's hard constraints
@@ -148,9 +248,11 @@ applies automatically once the agent reads its instructions file.
 ## Contributing
 
 - **Architecture changes** (states, modes, operators, dissipation rules, HALIRA): edit [`lambda-engine/CORE.md`](lambda-engine/CORE.md) only — every adapter points there, so changes propagate without touching adapter files.
-- **New Cursor commands or rules**: add to `.cursor/commands/` or `.cursor/rules/<category>/` and update `.cursor/tuts/COMMANDS.md`; see [Contributing to the Cursor Implementation](docs/cursor-native-guide.md#contributing-to-the-cursor-implementation).
-- **New Claude Code skills or commands**: add to `.claude/skills/<name>/SKILL.md` and `.claude/commands/<name>.md`.
-- **Before submitting changes to `CORE.md`**: run the eval suite in `evals/lambda-engine/` to confirm the hard constraints (Meta max 2 consecutive, never `Non` after `Meta`, HALIRA step order, etc.) still hold.
+- **Canonical instruction sources:** edit under [`src/skills/`](src/skills/), [`src/commands/`](src/commands/), [`src/rules/`](src/rules/), and [`src/agents/`](src/agents/). Repository `.cursor/<category>` paths are symlinks to those directories for Cursor/Claude discovery — do not maintain a second copy.
+- **New skills:** add under `src/skills/<name>/SKILL.md`, update `src/skills/README.md`, and list the path in [`config.yaml`](config.yaml). Claude picks them up via `.claude` → `.cursor` → `src`. Keep always-apply at the single umbrella stub; do not reintroduce fat always-on process rules or a divergent `claude/` tree.
+- **Commands:** keep Explicit wrappers thin under `src/commands/` (Mode/Λ wrappers + `/debug`). Put operational detail in skills; use workspace `/opsx:*` for SDD.
+- **Installer changes:** update [`bin/autopoetic`](bin/autopoetic) + `config.yaml` together; run `python3 -m pytest tests/test_autopoetic_init.py`.
+- **Before submitting changes to `CORE.md`**: run the eval suite in `evals/lambda-engine/` to confirm the hard constraints (Meta max 2 consecutive, never `Non` immediately after `Meta`, HALIRA step order, etc.) still hold.
 
 ## License
 
